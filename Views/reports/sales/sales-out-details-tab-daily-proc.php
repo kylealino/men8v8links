@@ -1,0 +1,1 @@
+sales-out-details-tab-daily-proc
