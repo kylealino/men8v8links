@@ -27,8 +27,96 @@
                     <h3 class="h4 mb-0"> <i class="bi bi-pencil-square"></i> Entry</h3>
                 </div>
                 <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <div class="row mb-3">
+                                <label class="col-sm-3 form-label" for="main_itemc">Select Itemcode:</label>
+                                <div class="col-sm-9">
+                                    <input type="text" id="main_itemc" name="main_itemc" class="form-control form-control-sm bg-white" autocomplete="off"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
-
+                        <div class="table-responsive">
+                            <div class="col-md-12 col-md-12 col-md-12">
+                                <table class="table table-light table-hover table-bordered text-center table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th  nowrap="nowrap" colspan="6" class="text-center">RAW PRODUCT COST AND YIELD</th>
+                                            <th  nowrap="nowrap" colspan="4" class="text-center">PRODUCT COST</th>
+                                        </tr>
+                                        <tr>
+                                            <th nowrap="nowrap">
+                                                <button type="button" class="btn btn-success btn-sm" onclick="javascript:my_add_line_item_fgpack();" >
+                                                    <i class="bi bi-plus"></i>
+                                                </button>
+                                            </th>
+                                            <th nowrap="nowrap">ITEM</th>
+                                            <th nowrap="nowrap">COST</th>
+                                            <th nowrap="nowrap">YIELD</th>
+                                            <th nowrap="nowrap">UOM</th>
+                                            <th nowrap="nowrap">COST/YIELD</th>
+                                            <th nowrap="nowrap">UNIT</th>
+                                            <th nowrap="nowrap">UOM</th>
+                                            <th nowrap="nowrap">COST</th>
+                                            <th nowrap="nowrap">COST NET OF VAT</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td  nowrap="nowrap">
+                                                <button type="button" class="btn btn-xs btn-danger" style="font-size:15px; padding: 2px 6px 2px 6px; " onclick="$(this).closest('tr').remove();"><i class="bi bi-x"></i></button>
+                                            </td>
+                                            <td  nowrap="nowrap">test</td>
+                                            <td  nowrap="nowrap">test</td>
+                                            <td  nowrap="nowrap">test</td>
+                                            <td  nowrap="nowrap">test</td>
+                                            <td  nowrap="nowrap">test</td>
+                                            <td  nowrap="nowrap">test</td>
+                                            <td  nowrap="nowrap">test</td>
+                                            <td  nowrap="nowrap">test</td>
+                                            <td  nowrap="nowrap">test</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot >
+                                        <tr>
+                                            <td colspan="8" class="text-end">EST. SPOILAGE/WASTAGE(2% TOTAL FOOD COST)</td>
+                                            <td class="text-right" id="total"></td>
+                                            <td class="text-right" id="total"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="9" class="text-end">FOOD COST</td>
+                                            <td class="text-right" id="total"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="9" class="text-end">ADD: VAT</td>
+                                            <td class="text-right" id="total"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="9" class="text-end">TOTAL FOOD COST</td>
+                                            <td class="text-right" id="total"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="9" class="text-end">Opex 20%</td>
+                                            <td class="text-right" id="total"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="9" class="text-end">TOTAL</td>
+                                            <td class="text-right" id="total"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="9" class="text-end">Profit 40%</td>
+                                            <td class="text-right" id="total"></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="9" class="text-end">SRP</td>
+                                            <td class="text-right" id="total"></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div> 
+                        </div> 
                     </div> 
                     <div class="row gy-2 mb-3">
 
