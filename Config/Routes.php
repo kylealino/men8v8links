@@ -330,6 +330,9 @@ $routes->post('sub-inv-recs', 'Md_subitems_inv::sub_inv_recs_vw',['filter' => 'm
 $routes->add('sub-inv-recs-vw', 'Md_subitems_inv::sub_inv_recs_vw',['filter' => 'myauthuser']);
 $routes->post('sub-inv-save','Md_subitems_inv::sub_inv_save',['filter' => 'myauthuser']);
 
+//Sub Item BOM
+$routes->get('sub-item-bom','Md_subitems_bom::index',['filter' => 'myauthuser']);
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing

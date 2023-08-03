@@ -301,12 +301,17 @@ $cuserfullname = session()->get('__xsys_myusererpfullname__');
         <ul id="maitenance-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
             <a href="<?=site_url();?>sub-item-masterdata">
-              <i class="bi bi-circle"></i><span>SUB ITEM MASTERDATA</span>
+              <i class="bi bi-circle"></i><span>Sub Item Masterdata</span>
             </a>
           </li>
           <li>
             <a href="<?=site_url();?>sub-item-inv">
-              <i class="bi bi-circle"></i><span>SUB ITEM INVENTORY INSERTION</span>
+              <i class="bi bi-circle"></i><span>Sub Item Inventory</span>
+            </a>
+          </li>
+          <li>
+            <a href="<?=site_url();?>sub-item-bom">
+              <i class="bi bi-circle"></i><span>BOM</span>
             </a>
           </li>
         </ul>
