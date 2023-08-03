@@ -75,13 +75,14 @@ class MyMDSubItemsInv extends Model
 		$rw = $qry->getRowArray();
 		$npagelimit = ($npagelimit > 0 ? $npagelimit : 30);
 		$nstart = ($npagelimit * ($npages - 1));
+        $nstart = $nstart < 0 ? 0 : $nstart; 
 		
 		
 		$npage_count = ceil(($rw['__nrecs'] + 0) / $npagelimit);
 		$data['npage_count'] = $npage_count;
 		$data['npage_curr'] = $npages;
 		$str = "
-		SELECT * from ({$strqry}) oa limit 0,{$npagelimit} ";
+		SELECT * from ({$strqry}) oa limit {$nstart},{$npagelimit} ";
 		$qry = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
 		
 		if($qry->resultID->num_rows > 0) { 
@@ -98,120 +99,137 @@ class MyMDSubItemsInv extends Model
     public function sub_inv_entry_save() {
 
         $adata1 = $this->request->getVar('adata1');
-        var_dump($adata1);
-        die();
-        // if(count($adata1) > 0) { 
-        //     $ame = array();
-        //     $adatar1 = array();
 
-        //     for($aa = 0; $aa < count($adata1); $aa++) { 
-        //         $medata = explode("x|x",$adata1[$aa]);
-        //         $mitemc = trim($medata[0]);
+        //DELETE SALES RECORD IF EXISTING AND INSERT NEW
+        $str="
+            SELECT * FROM trx_E0021_cs_myivty_lb_dtl WHERE `MTYPE` = 'SALES'
+        ";
+        $qry = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
 
-        //         array_push($adatar1,$medata);
-        //     }  
+        if($qry->resultID->num_rows > 0) { 
+            $str="
+                DELETE FROM trx_E0021_cs_myivty_lb_dtl WHERE `MTYPE` = 'SALES'
+            ";
+            $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+		}
+
+        if(count($adata1) > 0) { 
+            $ame = array();
+            $adatar1 = array();
+
+            for($aa = 0; $aa < count($adata1); $aa++) { 
+                $medata = explode("x|x",$adata1[$aa]);
+                $mitemc = trim($medata[0]);
+
+                array_push($adatar1,$medata);
+            }  
            
-        //     if(count($adatar1) > 0) { 
-        //         for($xx = 0; $xx < count($adatar1); $xx++) { 
+            if(count($adatar1) > 0) { 
+                for($xx = 0; $xx < count($adatar1); $xx++) { 
                     
-        //             $xdata = $adatar1[$xx];
-        //             $mitemc = $xdata[0];
+                    $xdata = $adatar1[$xx];
+                    $mitemc = $xdata[0];
                     
-        //             $str="
-        //             SELECT
-        //                 `SO_ITEMCODE`,
-        //                 `SO_BARCODE`,
-        //                 `SO_QTY`,
-        //                 `SO_COST`,
-        //                 `SO_SRP`,
-        //                 `SO_TAMT`,
-        //                 `SO_DISC_AMT`,
-        //                 `SO_GROSS`,
-        //                 `SO_REFUND`,
-        //                 `SO_RETURNS`,
-        //                 `SO_VOIDS`,
-        //                 `SO_NET`,
-        //                 `SO_DATE`,
-        //                 `SO_BRANCH`,
-        //                 `SO_COMP_ID`,
-        //                 `SO_BRANCH_ID`,
-        //                 `SO_OPRICE`,
-        //                 `SO_ASRP`,
-        //                 `SO_SC_DISC`,
-        //                 `SO_PWD_DISC`,
-        //                 `SO_OTHER_DISC`,
-        //                 `SO_SC_PWD_VAT_EXMP`,
-        //                 `SO_PROMO_DISC`,
-        //                 `SO_QTY_RETURN`,
-        //                 `SO_AMOUNT_RETURN`,
-        //                 `SO_TOT_QTY`,
-        //                 `SO_TAG`,
-        //                 `SO_ENCD`,
-        //                 `SO_MUSER`
-        //             FROM
-        //                 `trx_E0021_salesout`
-        //             WHERE 
-        //                 MONTH(`SO_DATE`) = MONTH(CURDATE()) AND YEAR(`SO_DATE`) = YEAR(CURDATE())
-        //                 AND
-        //                 `SO_ITEMCODE` = '$mitemc'
-        //             ";
-        //             $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
-        //             $rw = $q->getRowArray();
-        //             $SO_ITEMCODE = $rw['SO_ITEMCODE'];
-        //             $SO_BARCODE = $rw['SO_BARCODE'];
-        //             $SO_QTY = $rw['SO_QTY'];
-        //             $SO_NET = $rw['SO_NET'];
-        //             $SO_BRANCH_ID = $rw['SO_BRANCH_ID'];
+                    $str="
+                    SELECT
+                        a.`SO_ITEMCODE`,
+                        a.`SO_BARCODE`,
+                        a.`SO_QTY`,
+                        a.`SO_COST`,
+                        a.`SO_SRP`,
+                        a.`SO_TAMT`,
+                        a.`SO_DISC_AMT`,
+                        a.`SO_GROSS`,
+                        a.`SO_REFUND`,
+                        a.`SO_RETURNS`,
+                        a.`SO_VOIDS`,
+                        a.`SO_NET`,
+                        a.`SO_DATE`,
+                        a.`SO_BRANCH`,
+                        a.`SO_COMP_ID`,
+                        a.`SO_BRANCH_ID`,
+                        a.`SO_OPRICE`,
+                        a.`SO_ASRP`,
+                        a.`SO_SC_DISC`,
+                        a.`SO_PWD_DISC`,
+                        a.`SO_OTHER_DISC`,
+                        a.`SO_SC_PWD_VAT_EXMP`,
+                        a.`SO_PROMO_DISC`,
+                        a.`SO_QTY_RETURN`,
+                        a.`SO_AMOUNT_RETURN`,
+                        a.`SO_TOT_QTY`,
+                        a.`SO_TAG`,
+                        a.`SO_ENCD`,
+                        a.`SO_MUSER`,
+                        b.`SUB_DESC`
+                    FROM
+                        `trx_E0021_salesout` a
+                    JOIN
+                        mst_cs_article b
+                    ON
+                        a.`SO_ITEMCODE` = b.`SUB_ART_CODE`
+                    WHERE 
+                        MONTH(`SO_DATE`) = MONTH(CURDATE()) AND YEAR(`SO_DATE`) = YEAR(CURDATE())
+                        AND
+                        `SO_ITEMCODE` = '$mitemc'
+                    ";
+                    $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+                    $rw = $q->getRowArray();
+                    $SO_ITEMCODE = $rw['SO_ITEMCODE'];
+                    $SO_BARCODE = $rw['SO_BARCODE'];
+                    $SO_QTY = $rw['SO_QTY'];
+                    $SO_COST = $rw['SO_COST'];
+                    $SO_NET = $rw['SO_NET'];
+                    $SO_BRANCH_ID = $rw['SO_BRANCH_ID'];
+                    $SUB_DESC = $rw['SUB_DESC'];
+                    $TOTAL_QTY = $SO_QTY * -1;
 
-        //             $str="
-        //             INSERT INTO .`trx_E0021_cs_myivty_lb_dtl` (
-        //                 `MBRANCH_ID`,
-        //                 `ITEMC`,
-        //                 `ITEM_BARCODE`,
-        //                 `ITEM_DESC`,
-        //                 `MQTY`,
-        //                 `MQTY_CORRECTED`,
-        //                 `MCOST`,
-        //                 `MSRP`,
-        //                 `SO_GROSS`,
-        //                 `SO_NET`,
-        //                 `MARTM_COST`,
-        //                 `MARTM_PRICE`,
-        //                 `MTYPE`,
-        //                 `MFORM_SIGN`,
-        //                 `ITEMC_HIER1`,
-        //                 `MUSER`,
-        //                 `MLASTDELVD`,
-        //                 `MPROCDATE`
-        //               )
-        //               VALUES
-        //                 (
-        //                   '$SO_BRANCH_ID',
-        //                   '$SO_ITEMCODE',
-        //                   '$SO_BARCODE',
-        //                   '$SO_ITEMCODE',
-        //                   '$SO_QTY',
-        //                   '$SO_QTY',
-        //                   'SO_COST',
-        //                   'MSRP',
-        //                   'SO_GROSS',
-        //                   'SO_NET',
-        //                   'MARTM_COST',
-        //                   'MARTM_PRICE',
-        //                   'MTYPE',
-        //                   'MFORM_SIGN',
-        //                   'ITEMC_HIER1',
-        //                   'MUSER',
-        //                   'MLASTDELVD',
-        //                   'MPROCDATE'
-        //                 )
-        //             ";
-        //             $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
-        //         }
+                    $str="
+                    INSERT INTO .`trx_E0021_cs_myivty_lb_dtl` (
+                        `MBRANCH_ID`,
+                        `ITEMC`,
+                        `ITEM_BARCODE`,
+                        `ITEM_DESC`,
+                        `MQTY`,
+                        `MQTY_CORRECTED`,
+                        `MCOST`,
+                        `SO_GROSS`,
+                        `SO_NET`,
+                        `MARTM_COST`,
+                        `MARTM_PRICE`,
+                        `MTYPE`,
+                        `MFORM_SIGN`,
+                        `MUSER`,
+                        `MLASTDELVD`,
+                        `MPROCDATE`
+                      )
+                      VALUES
+                        (
+                          '$SO_BRANCH_ID',
+                          '$SO_ITEMCODE',
+                          '$SO_BARCODE',
+                          '$SUB_DESC',
+                          '$TOTAL_QTY',
+                          '$SO_QTY',
+                          '$SO_COST',
+                          '$SO_NET',
+                          '$SO_NET',
+                          '$SO_COST',
+                          '$SO_NET',
+                          'SALES',
+                          '-',
+                          'IT-KYLE',
+                          now(),
+                          now()
+                        )
+                    ";
+                    $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+                }
                 
-        //     } 
+            } 
                 
-        // }
+        }
+
         echo "<div class=\"alert alert-success mb-0\" role=\"alert\"><strong>Info.<br/></strong><strong>Success</strong> Data Recorded Successfully!!! </div>
         <script type=\"text/javascript\"> 
             function __fg_refresh_data() { 

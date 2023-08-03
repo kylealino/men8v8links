@@ -75,50 +75,50 @@ if (!empty($sub_itemc)) {
                             <div class="row mb-3">
                                 <label class="col-sm-3 form-label" for="main_itemc">Main Itemcode:</label>
                                 <div class="col-sm-9">
-                                    <input type="text" id="main_itemc" name="main_itemc" class="form-control form-control-sm bg-white" value="<?=$main_itemc;?>"/>
+                                    <input type="text" id="main_itemc" name="main_itemc" class="form-control form-control-sm bg-white" value="<?=$main_itemc;?>" autocomplete="off"/>
                                     <input type="hidden" name="recid" id="recid" value="<?=$recid;?>">
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label class="col-sm-3 form-label" for="sub_itemc">Sub Itemcode:</label>
                                 <div class="col-sm-9">
-                                    <input type="text" id="sub_itemc" name="sub_itemc" class="form-control form-control-sm" value="<?=$sub_itemc;?>"/>
+                                    <input type="text" id="sub_itemc" name="sub_itemc" class="form-control form-control-sm" value="<?=$sub_itemc;?>" autocomplete="off"/>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label class="col-sm-3 form-label" for="sub_desc">Sub Itemcode Description:</label>
                                 <div class="col-sm-9">
-                                    <input type="text" id="sub_desc" name="sub_desc" class="form-control form-control-sm" value="<?=$sub_desc;?>"/>
+                                    <input type="text" id="sub_desc" name="sub_desc" class="form-control form-control-sm" value="<?=$sub_desc;?>" autocomplete="off"/>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label class="col-sm-3 form-label" for="barcode">Barcode:</label>
                                 <div class="col-sm-9">
-                                    <input type="number" id="barcode" name="barcode" class="form-control form-control-sm" value="<?=$barcode;?>" maxlength="13"/>
+                                    <input type="number" id="barcode" name="barcode" class="form-control form-control-sm" value="<?=$barcode;?>" maxlength="13" autocomplete="off"/>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label class="col-sm-3 form-label" for="convf">Conversion Factor:</label>
                                 <div class="col-sm-9">
-                                    <input type="number" id="convf" name="convf" class="form-control form-control-sm" value="<?=$convf;?>"/>
+                                    <input type="number" id="convf" name="convf" class="form-control form-control-sm" value="<?=$convf;?>" autocomplete="off"/>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label class="col-sm-3 form-label" for="uom">UOM:</label>
                                 <div class="col-sm-9">
-                                    <input type="text" id="uom" name="uom" class="form-control form-control-sm bg-white" value="<?=$uom;?>"/>
+                                    <input type="text" id="uom" name="uom" class="form-control form-control-sm bg-white" value="<?=$uom;?>" autocomplete="off"/>
                                 </div>
                             </div>
                             <div class="row mb-3">  
                                 <label class="col-sm-3 form-label" for="cost">COST:</label>
                                 <div class="col-sm-9">
-                                    <input type="number" id="cost" name="cost" class="form-control form-control-sm" value="<?=$cost;?>"/>
+                                    <input type="number" id="cost" name="cost" class="form-control form-control-sm" value="<?=$cost;?>" autocomplete="off"/>
                                 </div>
                             </div>
                             <div class="row mb-3">  
                                 <label class="col-sm-3 form-label" for="srp">SRP:</label>
                                 <div class="col-sm-9">
-                                    <input type="number" id="srp" name="srp" class="form-control form-control-sm" value="<?=$srp;?>"/>
+                                    <input type="number" id="srp" name="srp" class="form-control form-control-sm" value="<?=$srp;?>" autocomplete="off"/>
                                 </div>
                             </div>
                         </div>
