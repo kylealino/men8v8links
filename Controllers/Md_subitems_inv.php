@@ -86,6 +86,23 @@ class Md_subitems_inv extends BaseController
         $data = $this->mymdsubitemsinv->sub_items_inv_view_recs($mpages, 10, $txtsearchedrec);
         return view('masterdata/sub_masterdata_inv/sub-md-item-inv-recs', $data);
 
+    } //end sub_inv_recs_vw
+	
+	public function sub_inv_recs_convf() { 
+		
+		$data = $this->mymdsubitemsinv->sub_items_inv_view_recs_convf(1, 10);
+        return view('masterdata/sub_masterdata_inv/sub-md-item-inv-recs-vw',$data);
+		
+    }
+
+	public function sub_inv_recs_vw_convf(){
+
+        $txtsearchedrec = $this->request->getVar('txtsearchedrec');
+        $mpages = $this->request->getVar('mpages');
+        $mpages = (empty($mpages) ? 0 : $mpages);
+        $data = $this->mymdsubitemsinv->sub_items_inv_view_recs_convf($mpages, 10, $txtsearchedrec);
+        return view('masterdata/sub_masterdata_inv/sub-md-item-inv-recs-vw', $data);
+
     } //end sub_inv_recs_vw 
 
 	public function sub_inv_save(){

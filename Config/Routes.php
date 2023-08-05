@@ -333,6 +333,8 @@ $routes->get('sub-item-inv','Md_subitems_inv::index',['filter' => 'myauthuser'])
 $routes->get('get-branch','Md_subitems_inv::get_branch',['filter' => 'myauthuser']);
 $routes->post('sub-inv-recs', 'Md_subitems_inv::sub_inv_recs_vw',['filter' => 'myauthuser']);
 $routes->add('sub-inv-recs-vw', 'Md_subitems_inv::sub_inv_recs_vw',['filter' => 'myauthuser']);
+$routes->post('sub-inv-recs-convf', 'Md_subitems_inv::sub_inv_recs_convf',['filter' => 'myauthuser']);
+$routes->add('sub-inv-recs-vw-convf', 'Md_subitems_inv::sub_inv_recs_vw_convf',['filter' => 'myauthuser']);
 $routes->post('sub-inv-save','Md_subitems_inv::sub_inv_save',['filter' => 'myauthuser']);
 
 //Sub Item BOM

@@ -77,6 +77,24 @@
 </main>
 
 <script>
+$(document).ready(function(){
+    sub_items_view_convf();
+});
+
+function sub_items_view_convf(){ 
+    var ajaxRequest;
+
+    ajaxRequest = jQuery.ajax({
+        url: "<?=site_url();?>sub-inv-recs-convf",
+        type: "post"
+    });
+
+    __mysys_apps.mepreloader('mepreloaderme',true);
+      ajaxRequest.done(function(response, textStatus, jqXHR) {
+          jQuery('#subitems').html(response);
+          __mysys_apps.mepreloader('mepreloaderme',false);
+      });
+  };
 
     jQuery('#branch_name')
 		// don't navigate away from the field on tab when selecting an item
