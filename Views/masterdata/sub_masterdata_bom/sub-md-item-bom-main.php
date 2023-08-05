@@ -40,7 +40,7 @@
                     <div class="row">
                         <div class="table-responsive">
                             <div class="col-md-12 col-md-12 col-md-12">
-                                <table class="table table-light table-hover table-bordered text-center table-sm">
+                                <table class="table table-hover table-bordered text-center table-sm" id="tbl-bom">
                                     <thead>
                                         <tr>
                                             <th  nowrap="nowrap" colspan="6" class="text-center">RAW PRODUCT COST AND YIELD</th>
@@ -48,7 +48,7 @@
                                         </tr>
                                         <tr>
                                             <th nowrap="nowrap">
-                                                <button type="button" class="btn btn-success btn-sm" onclick="javascript:my_add_line_item_fgpack();" >
+                                                <button type="button" class="btn btn-success btn-sm" onclick="javascript:my_add_line_item_bom();" >
                                                     <i class="bi bi-plus"></i>
                                                 </button>
                                             </th>
@@ -64,7 +64,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
+                                        <!-- <tr>
                                             <td  nowrap="nowrap">
                                                 <button type="button" class="btn btn-xs btn-danger" style="font-size:15px; padding: 2px 6px 2px 6px; " onclick="$(this).closest('tr').remove();"><i class="bi bi-x"></i></button>
                                             </td>
@@ -77,6 +77,23 @@
                                             <td  nowrap="nowrap">test</td>
                                             <td  nowrap="nowrap">test</td>
                                             <td  nowrap="nowrap">test</td>
+                                        </tr> -->
+
+                                        <tr style="display: none;">
+                                            <td nowrap="nowrap">
+                                            <button type="button" class="btn btn-xs btn-danger" style="font-size:15px; padding: 2px 6px 2px 6px; " onclick="$(this).closest('tr').remove();"><i class="bi bi-x"></i></button>
+                                            <input class="mitemrid" type="hidden" value=""/>
+                                            <input type="hidden" value=""/>
+                                            </td>
+                                            <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
+                                            <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
+                                            <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
+                                            <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
+                                            <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
+                                            <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
+                                            <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
+                                            <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
+                                            <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
                                         </tr>
                                     </tbody>
                                     <tfoot >
@@ -247,4 +264,74 @@
     //         __mysys_apps.mepreloader('mepreloaderme',false);
     //     });
     // };
+
+    // function my_add_line_item_bom() {  
+    //       try {
+            
+    //         var rowCount = jQuery('#tbl-bom tr').length;
+    //         var mid =  (rowCount + 1);
+    //         var clonedRow = jQuery('#tbl-bom tr:eq(' + (rowCount - 1) + ')').clone(); 
+
+    //         jQuery(clonedRow).find('input[type=text]').eq(0).attr('id','mitemcode_' + mid);
+    //         jQuery(clonedRow).find('input[type=text]').eq(1).attr('id','mitemdesc_' + mid);
+    //         jQuery(clonedRow).find('input[type=text]').eq(2).attr('id','mitembcode_' + mid);
+    //         jQuery(clonedRow).find('input[type=text]').eq(3).attr('id','mitemdisc_' + mid);
+    //         jQuery(clonedRow).find('input[type=text]').eq(4).attr('id','mitemprice_' + mid);
+    //         jQuery(clonedRow).find('input[type=text]').eq(5).attr('id','mitemdiscsrp_' + mid);
+    //         jQuery(clonedRow).find('input[type=text]').eq(6).attr('id','mitemcost_' + mid);
+    //         jQuery(clonedRow).find('input[type=text]').eq(7).attr('id','mitemdiscsrp_' + mid);
+    //         jQuery(clonedRow).find('input[type=text]').eq(8).attr('id','mitemcost_' + mid);
+    //         jQuery(clonedRow).find('input[type=text]').eq(9).attr('id','mitemcost_' + mid);
+            
+    //         jQuery(clonedRow).find('input[type=hidden]').eq(0).attr('id','mitemrid_' + mid);
+            
+            
+    //         jQuery('#tbl-bom tr').eq(rowCount - 1).before(clonedRow);
+    //         jQuery(clonedRow).css({'display':''});
+
+    //         // __my_item_lookup();
+    //         // __pack_totals();
+            
+    //       } catch(err) { 
+    //         var mtxt = 'There was an error on this page.\\n';
+    //         mtxt += 'Error description: ' + err.message;
+    //         mtxt += '\\nClick OK to continue.';
+    //         alert(mtxt);
+    //         return false;
+    //   }  //end try 
+    // }
+
+    function my_add_line_item_bom() {
+		try {
+			var rowCount = jQuery('#tbl-bom tr').length;
+
+			var mid = __mysys_apps.__do_makeid(5) + (rowCount + 1);
+			var clonedRow = jQuery('#tbl-bom tr:eq(' + (rowCount - 9) + ')').clone(); 
+            jQuery(clonedRow).find('input[type=text]').eq(0).attr('id','mitemcode_' + mid);
+            jQuery(clonedRow).find('input[type=text]').eq(1).attr('id','mitemdesc_' + mid);
+            jQuery(clonedRow).find('input[type=text]').eq(2).attr('id','mitembcode_' + mid);
+            jQuery(clonedRow).find('input[type=text]').eq(3).attr('id','mitemdisc_' + mid);
+            jQuery(clonedRow).find('input[type=text]').eq(4).attr('id','mitemprice_' + mid);
+            jQuery(clonedRow).find('input[type=text]').eq(5).attr('id','mitemdiscsrp_' + mid);
+            jQuery(clonedRow).find('input[type=text]').eq(6).attr('id','mitemcost_' + mid);
+            jQuery(clonedRow).find('input[type=text]').eq(7).attr('id','mitemdiscsrp_' + mid);
+            jQuery(clonedRow).find('input[type=text]').eq(8).attr('id','mitemcost_' + mid);
+            jQuery(clonedRow).find('input[type=text]').eq(9).attr('id','mitemcost_' + mid);
+
+			jQuery('#tbl-bom tr').eq(rowCount - 9).before(clonedRow);
+			jQuery(clonedRow).css({'display':''});
+			jQuery(clonedRow).attr('id','tr_rec_' + mid);
+
+			var _bank_name_ = jQuery(clonedRow).find('input[type=number]').eq(0).attr('id');
+	
+			jQuery('#' + _bank_name_).focus();
+
+		} catch(err) { 
+			var mtxt = 'There was an error on this page.\\n';
+			mtxt += 'Error description: ' + err.message;
+			mtxt += '\\nClick OK to continue.';
+			alert(mtxt);
+			return false;
+		}  
+	}  //end rfp_addRows
 </script>

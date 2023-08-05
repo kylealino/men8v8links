@@ -224,6 +224,11 @@ $routes->get('mypromo-spromo', 'Mypromo_spromo::index',['filter' => 'myauthuser'
 $routes->get('mypromo-spromo-codes', 'Mypromo_spromo::spromo_search',['filter' => 'myauthuser']);
 $routes->get('mypromo-spromo-fromitems', 'Mypromo_spromo::fromspromo_items_search',['filter' => 'myauthuser']);
 $routes->post('mypromo-spromo-save', 'Mypromo_spromo::save_recs',['filter' => 'myauthuser']);
+$routes->post('mypromo-spromo-recs', 'Mypromo_spromo::view_recs',['filter' => 'myauthuser']);
+$routes->post('mypromo-spromo-rundown', 'Mypromo_spromo::spromo_rundown',['filter' => 'myauthuser']);
+$routes->get('mypromo-spromo-codes-rundown', 'Mypromo_spromo::tospromo_item_rundown_search',['filter' => 'myauthuser']);
+$routes->post('mypromo-spromo-rundown-save', 'Mypromo_spromo::spromo_rundown_save',['filter' => 'myauthuser']);
+$routes->post('mypromo-spromo-ivty-reg-mapping', 'Mypromo_spromo::spromo_ivty_reg_mapping',['filter' => 'myauthuser']);
 
 //mypos related module
 $routes->get('mypos-reprint-logs', 'MyPOSConn::reprint_logs');
@@ -332,6 +337,10 @@ $routes->post('sub-inv-save','Md_subitems_inv::sub_inv_save',['filter' => 'myaut
 
 //Sub Item BOM
 $routes->get('sub-item-bom','Md_subitems_bom::index',['filter' => 'myauthuser']);
+
+//Sub item Convertion
+$routes->get('sub-item-convf','Md_subitems_convf::index',['filter' => 'myauthuser']);
+$routes->add('sub-items-convf-vw', 'Md_subitems_convf::sub_item_convf_vw');
 
 /*
  * --------------------------------------------------------------------
