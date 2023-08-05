@@ -39,4 +39,37 @@ class Md_subitems_bom extends BaseController
 
 	} 
 
+	public function get_sub_materials(){
+		
+		$term    = $this->request->getVar('term');
+		$autoCompleteResult = array();
+
+		$str = "
+		SELECT
+		a.`recid`,
+		a.`ART_CODE`,
+		a.`ART_UOM`
+
+		FROM 
+		`mst_article` a
+
+		WHERE a.`ART_HIERC1` LIKE '%1001%' AND a.`ART_CODE` LIKE '%{$term}%'
+
+		";
+
+		$q =  $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+		if($q->getNumRows() > 0) {
+			$rrec = $q->getResultArray();
+			foreach($rrec as $row):
+				array_push($autoCompleteResult,array("value" => $row['ART_CODE'],
+				"ART_UOM" => $row['ART_UOM']
+				));
+			endforeach;
+		}
+
+		$q->freeResult();
+		echo json_encode($autoCompleteResult);
+		
+	} //end get_main_itemc	
+
 }

@@ -339,7 +339,7 @@ $routes->post('sub-inv-save','Md_subitems_inv::sub_inv_save',['filter' => 'myaut
 
 //Sub Item BOM
 $routes->get('sub-item-bom','Md_subitems_bom::index',['filter' => 'myauthuser']);
-
+$routes->get('get-sub-materials','Md_subitems_bom::get_sub_materials',['filter' => 'myauthuser']);
 //Sub item Convertion
 $routes->get('sub-item-convf','Md_subitems_convf::index',['filter' => 'myauthuser']);
 $routes->add('sub-items-convf-vw', 'Md_subitems_convf::sub_item_convf_vw');

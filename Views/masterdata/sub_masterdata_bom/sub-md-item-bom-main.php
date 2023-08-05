@@ -30,9 +30,9 @@
                     <div class="row mb-3">
                         <div class="col-6">
                             <div class="row mb-3">
-                                <label class="col-sm-3 form-label" for="main_itemc">Select Itemcode:</label>
+                                <label class="col-sm-3 form-label" for="sub_item">Select Itemcode:</label>
                                 <div class="col-sm-9">
-                                    <input type="text" id="main_itemc" name="main_itemc" class="form-control form-control-sm bg-white" autocomplete="off"/>
+                                    <input type="text" id="sub_item" name="sub_item" class="form-control form-control-sm bg-white" autocomplete="off"/>
                                 </div>
                             </div>
                         </div>
@@ -43,20 +43,12 @@
                                 <table class="table table-hover table-bordered text-center table-sm" id="tbl-bom">
                                     <thead>
                                         <tr>
-                                            <th  nowrap="nowrap" colspan="6" class="text-center">RAW PRODUCT COST AND YIELD</th>
-                                            <th  nowrap="nowrap" colspan="4" class="text-center">PRODUCT COST</th>
-                                        </tr>
-                                        <tr>
                                             <th nowrap="nowrap">
                                                 <button type="button" class="btn btn-success btn-sm" onclick="javascript:my_add_line_item_bom();" >
                                                     <i class="bi bi-plus"></i>
                                                 </button>
                                             </th>
                                             <th nowrap="nowrap">ITEM</th>
-                                            <th nowrap="nowrap">COST</th>
-                                            <th nowrap="nowrap">YIELD</th>
-                                            <th nowrap="nowrap">UOM</th>
-                                            <th nowrap="nowrap">COST/YIELD</th>
                                             <th nowrap="nowrap">UNIT</th>
                                             <th nowrap="nowrap">UOM</th>
                                             <th nowrap="nowrap">COST</th>
@@ -85,52 +77,13 @@
                                             <input class="mitemrid" type="hidden" value=""/>
                                             <input type="hidden" value=""/>
                                             </td>
+                                            <td nowrap="nowrap"><input type="text" class="form-control form-control-sm mitemcode"></td>
                                             <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
                                             <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
-                                            <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
-                                            <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
-                                            <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
-                                            <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
-                                            <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
-                                            <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
+                                            <td nowrap="nowrap"><input type="text" class="form-control form-control-sm" onmouseover="javascript:__pack_totals();" onmouseout="javascript:__pack_totals();"></td>
                                             <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
                                         </tr>
                                     </tbody>
-                                    <tfoot >
-                                        <tr>
-                                            <td colspan="8" class="text-end">EST. SPOILAGE/WASTAGE(2% TOTAL FOOD COST)</td>
-                                            <td class="text-right" id="total"></td>
-                                            <td class="text-right" id="total"></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="9" class="text-end">FOOD COST</td>
-                                            <td class="text-right" id="total"></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="9" class="text-end">ADD: VAT</td>
-                                            <td class="text-right" id="total"></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="9" class="text-end">TOTAL FOOD COST</td>
-                                            <td class="text-right" id="total"></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="9" class="text-end">Opex 20%</td>
-                                            <td class="text-right" id="total"></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="9" class="text-end">TOTAL</td>
-                                            <td class="text-right" id="total"></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="9" class="text-end">Profit 40%</td>
-                                            <td class="text-right" id="total"></td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="9" class="text-end">SRP</td>
-                                            <td class="text-right" id="total"></td>
-                                        </tr>
-                                    </tfoot>
                                 </table>
                             </div> 
                         </div> 
@@ -164,40 +117,44 @@
 </main>
 
 <script>
+    __my_item_lookup();
 
-    jQuery('#branch_name')
-		// don't navigate away from the field on tab when selecting an item
-		.bind( 'keydown', function( event ) {
-			if ( event.keyCode === jQuery.ui.keyCode.TAB &&
-				jQuery( this ).data( 'ui-autocomplete' ).menu.active ) { 
-				event.preventDefault();
-			}
-			if( event.keyCode === jQuery.ui.keyCode.TAB ) {
-				event.preventDefault();
-			}
-		})
-		.autocomplete({
-			minLength: 0,
-			source: '<?= site_url(); ?>get-branch/',
-			focus: function() {
-				// prevent value inserted on focus
-				return false;
-			},
-			search: function(oEvent, oUi) {
-				var sValue = jQuery(oEvent.target).val();
+    jQuery('#sub_item')
+        // don't navigate away from the field on tab when selecting an item
+        .bind( 'keydown', function( event ) {
+          if ( event.keyCode === jQuery.ui.keyCode.TAB &&
+            jQuery( this ).data( 'ui-autocomplete' ).menu.active ) {
+            event.preventDefault();
+        }
+        if( event.keyCode === jQuery.ui.keyCode.TAB ) {
+          event.preventDefault();
+        }
+      })
+        .autocomplete({
+          minLength: 0,
+          source: '<?= site_url(); ?>get-main-itemc',
+          focus: function() {
+                // prevent value inserted on focus
+                return false;
+              },
+              select: function( event, ui ) {
+                var terms = ui.item.value;
+                
+                jQuery('#sub_item').val(terms);
+                jQuery('#sub_item').attr("data-id-brnch-name",ui.item.mtkn_rid);
 
-			},
-			select: function( event, ui ) {
-				var terms = ui.item.value;
-				jQuery('#branch_name').val(terms);
-				jQuery(this).autocomplete('search', jQuery.trim(terms));
-				return false;
-			}
-		})
-		.click(function() {
-			var terms = this.value;
-			jQuery(this).autocomplete('search', jQuery.trim(terms));
-	});	//end branch_name
+            
+                jQuery(this).autocomplete('search', jQuery.trim(terms));
+
+                return false;
+
+        
+              }
+            })
+        .click(function() {
+          var terms = this.value;
+          jQuery(this).autocomplete('search', jQuery.trim(terms));     
+    }); 
 
 
     $("#mbtn_vw_recs").click(function(e){
@@ -305,26 +262,24 @@
 		try {
 			var rowCount = jQuery('#tbl-bom tr').length;
 
-			var mid = __mysys_apps.__do_makeid(5) + (rowCount + 1);
-			var clonedRow = jQuery('#tbl-bom tr:eq(' + (rowCount - 9) + ')').clone(); 
+			var mid = (rowCount + 2);
+            var clonedRow = jQuery('#tbl-bom tr:eq(' + (rowCount - 1) + ')').clone(); 
+
             jQuery(clonedRow).find('input[type=text]').eq(0).attr('id','mitemcode_' + mid);
             jQuery(clonedRow).find('input[type=text]').eq(1).attr('id','mitemdesc_' + mid);
             jQuery(clonedRow).find('input[type=text]').eq(2).attr('id','mitembcode_' + mid);
             jQuery(clonedRow).find('input[type=text]').eq(3).attr('id','mitemdisc_' + mid);
             jQuery(clonedRow).find('input[type=text]').eq(4).attr('id','mitemprice_' + mid);
             jQuery(clonedRow).find('input[type=text]').eq(5).attr('id','mitemdiscsrp_' + mid);
-            jQuery(clonedRow).find('input[type=text]').eq(6).attr('id','mitemcost_' + mid);
-            jQuery(clonedRow).find('input[type=text]').eq(7).attr('id','mitemdiscsrp_' + mid);
-            jQuery(clonedRow).find('input[type=text]').eq(8).attr('id','mitemcost_' + mid);
-            jQuery(clonedRow).find('input[type=text]').eq(9).attr('id','mitemcost_' + mid);
 
-			jQuery('#tbl-bom tr').eq(rowCount - 9).before(clonedRow);
-			jQuery(clonedRow).css({'display':''});
-			jQuery(clonedRow).attr('id','tr_rec_' + mid);
 
-			var _bank_name_ = jQuery(clonedRow).find('input[type=number]').eq(0).attr('id');
-	
-			jQuery('#' + _bank_name_).focus();
+            jQuery('#tbl-bom tr').eq(rowCount - 1).before(clonedRow);
+            jQuery(clonedRow).css({'display':''});
+            var xobjArtItem= jQuery(clonedRow).find('input[type=text]').eq(0).attr('id');
+            jQuery('#' + xobjArtItem).focus();
+
+            __my_item_lookup();
+            __pack_totals();
 
 		} catch(err) { 
 			var mtxt = 'There was an error on this page.\\n';
@@ -334,4 +289,87 @@
 			return false;
 		}  
 	}  //end rfp_addRows
+
+    function __my_item_lookup(){
+      jQuery('.mitemcode' ) 
+          // don't navigate away from the field on tab when selecting an item
+          .bind( 'keydown', function( event ) {
+            if ( event.keyCode === jQuery.ui.keyCode.TAB &&
+              jQuery( this ).data( 'autocomplete' ).menu.active ) {
+              event.preventDefault();
+          }
+          if( event.keyCode === jQuery.ui.keyCode.TAB ) {
+            event.preventDefault();
+          }
+        })
+          .autocomplete({
+            minLength: 0,
+            source: '<?= site_url(); ?> get-sub-materials',
+            focus: function() {
+                  // prevent value inserted on focus
+                  return false;
+                },
+                select: function( event, ui ) {
+                  var terms = ui.item.value;
+                  
+                  jQuery(this).attr('alt', jQuery.trim(ui.item.value));
+                  jQuery(this).attr('title', jQuery.trim(ui.item.value));
+                  
+                  this.value = ui.item.value;
+                  
+
+                  var clonedRow = jQuery(this).parent().parent().clone();
+                  var indexRow = jQuery(this).parent().parent().index();
+                  var xobjitemdesc = jQuery(clonedRow).find('input[type=hidden]').eq(0).attr('id'); //ID
+                  var xobjitemuom = jQuery(clonedRow).find('input[type=text]').eq(2).attr('id');/*BCODE*/
+
+                  $('#' + xobjitemdesc).val(ui.item.ART_CODE);
+                  $('#' + xobjitemuom).val(ui.item.ART_UOM);
+
+                  return false;
+                }
+              })
+          .click(function() { 
+
+              //jQuery(this).keydown(); 
+              var terms = this.value;
+              //jQuery(this).autocomplete('search', '');
+              jQuery(this).autocomplete('search', jQuery.trim(terms));
+            });  
+        }
+
+        function __pack_totals() { 
+
+            try { 
+            var rowCount1 = jQuery('#tbl-bom tr').length - 1;
+            var adata1 = [];
+            var adata2 = [];
+            var mdata = '';
+            var ninc = 0;
+            var nTAmount = 0;
+            var nTQty = 0;
+            for(aa = 1; aa < rowCount1; aa++) { 
+              var clonedRow = jQuery('#tbl-bom tr:eq(' + aa + ')').clone(); 
+              var cost = jQuery(clonedRow).find('input[type=text]').eq(3).val();
+              var xTAmntId = jQuery(clonedRow).find('input[type=text]').eq(4).attr('id');
+
+              var ntotal = cost / 1.12;
+              
+              $('#' + xTAmntId).val(ntotal.toFixed(2));
+  
+
+            }  //end for 
+            
+          } catch(err) {
+            var mtxt = 'There was an error on this page.\n';
+            mtxt += 'Error description: ' + err.message;
+            mtxt += '\nClick OK to continue.';
+            alert(mtxt);
+            $.hideLoading();
+            return false;
+        }  //end try            
+          
+      }
+
+    
 </script>
