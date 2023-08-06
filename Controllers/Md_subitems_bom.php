@@ -70,6 +70,36 @@ class Md_subitems_bom extends BaseController
 		$q->freeResult();
 		echo json_encode($autoCompleteResult);
 		
-	} //end get_main_itemc	
+	} //end get_sub_materials	
+
+	public function get_sub_itemc(){
+		
+		$term    = $this->request->getVar('term');
+		$autoCompleteResult = array();
+
+		$str = "
+		SELECT 
+		`SUB_ART_CODE`
+		FROM 
+		mst_cs_article
+		WHERE `SUB_ART_CODE` LIKE '%{$term}%'
+		GROUP BY 
+		`SUB_ART_CODE`
+
+		";
+
+		$q =  $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+		if($q->getNumRows() > 0) {
+			$rrec = $q->getResultArray();
+			foreach($rrec as $row):
+				array_push($autoCompleteResult,array("value" => $row['SUB_ART_CODE']
+				));
+			endforeach;
+		}
+
+		$q->freeResult();
+		echo json_encode($autoCompleteResult);
+		
+	} //end get_sub_itemc	
 
 }

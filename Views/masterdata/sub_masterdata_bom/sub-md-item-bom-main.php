@@ -89,7 +89,10 @@
                         </div> 
                     </div> 
                     <div class="row gy-2 mb-3">
-
+                      <div class="col-sm-4">
+                          <button id="mbtn_mn_Save" type="submit" class="btn btn-success btn-sm">Save</button>
+                          <?=anchor('sub-item-bom', '<i class="bi bi-arrow-repeat"></i>',' class="btn btn-outline-success btn-sm" ');?>
+                      </div>
                     </div>
                 </div> 
             </div>
@@ -119,6 +122,64 @@
 <script>
     __my_item_lookup();
 
+    $("#mbtn_mn_Save").click(function(e){
+       
+       try { 
+
+         var sub_item = jQuery('#sub_item').val();
+         var rowCount1 = jQuery('#tbl-promo tr').length - 1;
+         var adata1 = [];
+         var mdata = '';
+
+         for(aa = 1; aa < rowCount1; aa++) { 
+           var clonedRow = jQuery('#tbl-promo tr:eq(' + aa + ')').clone(); 
+           var mitemc = jQuery(clonedRow).find('input[type=text]').eq(0).val(); 
+           var mdesc = jQuery(clonedRow).find('input[type=text]').eq(1).val(); 
+           var mbcode = jQuery(clonedRow).find('input[type=text]').eq(2).val();
+           var mdisc = jQuery(clonedRow).find('input[type=text]').eq(3).val(); 
+           var morigsrp = jQuery(clonedRow).find('input[type=text]').eq(4).val(); 
+
+           mdata = mitemc + 'x|x' + mdesc + 'x|x' + mbcode + 'x|x' + mdisc + 'x|x' + morigsrp ;
+           adata1.push(mdata);
+           }
+
+           var mparam = {
+            sub_item:sub_item,
+             adata1: adata1
+           };  
+
+           console.log(mparam);
+           
+           $.ajax({ 
+             type: "POST",
+             url: '<?=site_url();?>me-promo-save',
+             context: document.body,
+             data: eval(mparam),
+             global: false,
+             cache: false,
+             success: function(data)  { 
+               $(this).prop('disabled', false);
+          // $.hideLoading();
+          jQuery('#memsgtestent_bod').html(data);
+          jQuery('#memsgtestent').modal('show');
+          return false;
+        },
+        error: function() {
+         alert('error loading page...');
+        // $.hideLoading();
+        return false;
+      } 
+    });
+
+         } catch(err) {
+           var mtxt = 'There was an error on this page.\n';
+           mtxt += 'Error description: ' + err.message;
+           mtxt += '\nClick OK to continue.';
+           alert(mtxt);
+   }  //end try
+   return false; 
+ });
+
     jQuery('#sub_item')
         // don't navigate away from the field on tab when selecting an item
         .bind( 'keydown', function( event ) {
@@ -132,7 +193,7 @@
       })
         .autocomplete({
           minLength: 0,
-          source: '<?= site_url(); ?>get-main-itemc',
+          source: '<?= site_url(); ?>get-sub-itemc',
           focus: function() {
                 // prevent value inserted on focus
                 return false;
