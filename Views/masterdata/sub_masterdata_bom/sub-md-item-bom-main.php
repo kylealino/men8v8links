@@ -6,8 +6,10 @@
  * 	last update : Jul 28, 2023
  * 	description : Sub Masterdata Main
  */
-
-
+$request = \Config\Services::request();
+$mylibzdb = model('App\Models\MyLibzDBModel');
+$mylibzsys = model('App\Models\MyLibzSysModel');
+$SUB_ITEM = $request->getVar('SUB_ITEM');
 ?>
 <main id="main">
     <div class="pagetitle">
@@ -32,7 +34,7 @@
                             <div class="row mb-3">
                                 <label class="col-sm-3 form-label" for="sub_item">Select Itemcode:</label>
                                 <div class="col-sm-9">
-                                    <input type="text" id="sub_item" name="sub_item" class="form-control form-control-sm bg-white" autocomplete="off"/>
+                                    <input type="text" id="sub_item" name="sub_item" class="form-control form-control-sm bg-white" value="<?=$SUB_ITEM;?>" autocomplete="off"/>
                                 </div>
                             </div>
                         </div>
@@ -56,21 +58,44 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- <tr>
-                                            <td  nowrap="nowrap">
-                                                <button type="button" class="btn btn-xs btn-danger" style="font-size:15px; padding: 2px 6px 2px 6px; " onclick="$(this).closest('tr').remove();"><i class="bi bi-x"></i></button>
-                                            </td>
-                                            <td  nowrap="nowrap">test</td>
-                                            <td  nowrap="nowrap">test</td>
-                                            <td  nowrap="nowrap">test</td>
-                                            <td  nowrap="nowrap">test</td>
-                                            <td  nowrap="nowrap">test</td>
-                                            <td  nowrap="nowrap">test</td>
-                                            <td  nowrap="nowrap">test</td>
-                                            <td  nowrap="nowrap">test</td>
-                                            <td  nowrap="nowrap">test</td>
-                                        </tr> -->
+                                        <?php if(!empty($SUB_ITEM)):
+                                          $str="
+                                          SELECT
+                                            `SUB_ITEM`,
+                                            `SUB_ITEM_MATERIAL`,
+                                            `UNIT`,
+                                            `UOM`,
+                                            `COST`,
+                                            `COST_NET`
+                                          FROM
+                                            `mst_sub_bom`
+                                          WHERE 
+                                            `SUB_ITEM` = '$SUB_ITEM'
+                                          ";
+                                          $q = $mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+                                          $rw = $q->getResultArray();
+                                          foreach ($rw as $data) {
+                                            $SUB_ITEM_MATERIAL = $data['SUB_ITEM_MATERIAL'];
+                                            $UNIT = $data['UNIT'];
+                                            $UOM = $data['UOM'];
+                                            $COST = $data['COST'];
+                                            $COST_NET = $data['COST_NET'];
 
+                                        ?>
+                                        <tr>
+                                          <td nowrap="nowrap">
+                                            <button type="button" class="btn btn-xs btn-danger" style="font-size:15px; padding: 2px 6px 2px 6px; " onclick="$(this).closest('tr').remove();"><i class="bi bi-x"></i></button>
+                                            <input class="mitemrid" type="hidden" value=""/>
+                                            <input type="hidden" value=""/>
+                                          </td>
+                                          <td nowrap="nowrap"><input type="text" class="form-control form-control-sm mitemcode" value="<?=$SUB_ITEM_MATERIAL;?>" ></td>
+                                          <td nowrap="nowrap"><input type="text" class="form-control form-control-sm" value="<?=$UNIT;?>"></td>
+                                          <td nowrap="nowrap"><input type="text" class="form-control form-control-sm" value="<?=$UOM;?>"></td>
+                                          <td nowrap="nowrap"><input type="text" class="form-control form-control-sm" value="<?=$COST;?>"></td>
+                                          <td nowrap="nowrap"><input type="text" class="form-control form-control-sm" value="<?=$COST_NET;?>"></td>
+                                        </tr>
+                                        <?php }?>
+                                        <?php endif;?>
                                         <tr style="display: none;">
                                             <td nowrap="nowrap">
                                             <button type="button" class="btn btn-xs btn-danger" style="font-size:15px; padding: 2px 6px 2px 6px; " onclick="$(this).closest('tr').remove();"><i class="bi bi-x"></i></button>
@@ -90,8 +115,13 @@
                     </div> 
                     <div class="row gy-2 mb-3">
                       <div class="col-sm-4">
-                          <button id="mbtn_mn_Save" type="submit" class="btn btn-success btn-sm">Save</button>
-                          <?=anchor('sub-item-bom', '<i class="bi bi-arrow-repeat"></i>',' class="btn btn-outline-success btn-sm" ');?>
+                          <?php if(!empty($SUB_ITEM)):?>
+                            <button id="mbtn_mn_Update" type="submit" class="btn btn-primary btn-sm">Update</button>
+                            <?=anchor('sub-item-bom', '<i class="bi bi-arrow-repeat"></i>',' class="btn btn-outline-success btn-sm" ');?>
+                          <?php else:?>
+                            <button id="mbtn_mn_Save" type="submit" class="btn btn-success btn-sm">Save</button>
+                            <?=anchor('sub-item-bom', '<i class="bi bi-arrow-repeat"></i>',' class="btn btn-outline-success btn-sm" ');?>
+                          <?php endif;?>
                       </div>
                     </div>
                 </div> 
@@ -106,7 +136,7 @@
                     <h3 class="h4 mb-0"> <i class="bi bi-pencil-square"></i> Sub BOM Records</h3>
                 </div>
                 <div class="card-body">
-                    <div id="subitems" class="text-center p-2 rounded-3  mt-3 border-dotted bg-light p-4 ">
+                    <div id="subitemsrecs" class="text-center p-2 rounded-3  mt-3 border-dotted bg-light p-4 ">
                         <?php
 
                         ?> 
@@ -118,28 +148,52 @@
     </div> 
 
 </main>
-
+<?php
+    echo $mylibzsys->memsgbox1('memsgtestent_danger','<i class="bi bi-exclamation-circle"></i> System Alert','...','bg-pdanger');
+    echo $mylibzsys->memypreloader01('mepreloaderme');
+    echo $mylibzsys->memsgbox1('memsgtestent','System Alert','...');
+    ?> 
 <script>
+  $(document).ready(function(){
+    sub_items_view_bom();
+  });
+
     __my_item_lookup();
 
+    __mysys_apps.mepreloader('mepreloaderme',false);
+
+    function sub_items_view_bom(){ 
+    var ajaxRequest;
+
+    ajaxRequest = jQuery.ajax({
+        url: "<?=site_url();?>sub-items-bom-recs",
+        type: "post"
+    });
+
+    __mysys_apps.mepreloader('mepreloaderme',true);
+      ajaxRequest.done(function(response, textStatus, jqXHR) {
+          jQuery('#subitemsrecs').html(response);
+          __mysys_apps.mepreloader('mepreloaderme',false);
+      });
+  };
     $("#mbtn_mn_Save").click(function(e){
        
        try { 
 
          var sub_item = jQuery('#sub_item').val();
-         var rowCount1 = jQuery('#tbl-promo tr').length - 1;
+         var rowCount1 = jQuery('#tbl-bom tr').length - 1;
          var adata1 = [];
          var mdata = '';
 
          for(aa = 1; aa < rowCount1; aa++) { 
-           var clonedRow = jQuery('#tbl-promo tr:eq(' + aa + ')').clone(); 
+           var clonedRow = jQuery('#tbl-bom tr:eq(' + aa + ')').clone(); 
            var mitemc = jQuery(clonedRow).find('input[type=text]').eq(0).val(); 
-           var mdesc = jQuery(clonedRow).find('input[type=text]').eq(1).val(); 
-           var mbcode = jQuery(clonedRow).find('input[type=text]').eq(2).val();
-           var mdisc = jQuery(clonedRow).find('input[type=text]').eq(3).val(); 
-           var morigsrp = jQuery(clonedRow).find('input[type=text]').eq(4).val(); 
+           var munit = jQuery(clonedRow).find('input[type=text]').eq(1).val(); 
+           var muom = jQuery(clonedRow).find('input[type=text]').eq(2).val();
+           var mcost = jQuery(clonedRow).find('input[type=text]').eq(3).val(); 
+           var mcostnet = jQuery(clonedRow).find('input[type=text]').eq(4).val(); 
 
-           mdata = mitemc + 'x|x' + mdesc + 'x|x' + mbcode + 'x|x' + mdisc + 'x|x' + morigsrp ;
+           mdata = mitemc + 'x|x' + munit + 'x|x' + muom + 'x|x' + mcost + 'x|x' + mcostnet ;
            adata1.push(mdata);
            }
 
@@ -152,7 +206,7 @@
            
            $.ajax({ 
              type: "POST",
-             url: '<?=site_url();?>me-promo-save',
+             url: '<?=site_url();?>sub-items-bom-save',
              context: document.body,
              data: eval(mparam),
              global: false,

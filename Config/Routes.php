@@ -341,6 +341,10 @@ $routes->post('sub-inv-save','Md_subitems_inv::sub_inv_save',['filter' => 'myaut
 $routes->get('sub-item-bom','Md_subitems_bom::index',['filter' => 'myauthuser']);
 $routes->get('get-sub-materials','Md_subitems_bom::get_sub_materials',['filter' => 'myauthuser']);
 $routes->get('get-sub-itemc','Md_subitems_bom::get_sub_itemc',['filter' => 'myauthuser']);
+$routes->post('sub-items-bom-save','Md_subitems_bom::sub_item_bom_save',['filter' => 'myauthuser']);
+$routes->post('sub-items-bom-recs', 'Md_subitems_bom::sub_item_bom_recs',['filter' => 'myauthuser']);
+$routes->add('sub-items-bom-recs-vw', 'Md_subitems_bom::sub_item_bom_recs_vw',['filter' => 'myauthuser']);
+
 //Sub item Convertion
 $routes->get('sub-item-convf','Md_subitems_convf::index',['filter' => 'myauthuser']);
 $routes->add('sub-items-convf-vw', 'Md_subitems_convf::sub_item_convf_vw');
@@ -358,6 +362,7 @@ $routes->add('sub-items-convf-vw', 'Md_subitems_convf::sub_item_convf_vw');
  * You will have access to the $routes object within that file without
  * needing to reload it.
  */
+
 if (is_file(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php')) {
     require APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php';
 }

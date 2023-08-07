@@ -15,7 +15,7 @@ use App\Models\MyDatummodel;
 use App\Models\MyDatauaModel;
 use App\Models\MyWarehouseoutModel;
 use App\Models\MyLibzDBModel;
-use App\Models\MyMDSubItemsInv;
+use App\Models\MyMDSubItemsBom;
 
 use App\Libraries\Fpdf\Mypdf;
 class Md_subitems_bom extends BaseController 
@@ -26,7 +26,7 @@ class Md_subitems_bom extends BaseController
 		$this->mydbname = model('App\Models\MyDBNamesModel');
 		$this->db_erp = $this->mydbname->medb(0);
 		$this->mylibzdb = new MyLibzDBModel();
-		$this->mymdsubitemsinv = new MyMDSubItemsInv();
+		$this->mymdsubitemsbom = new MyMDSubItemsBom();
 		$this->request = \Config\Services::request();
    		$this->db = \Config\Database::connect();
 	}
@@ -101,5 +101,28 @@ class Md_subitems_bom extends BaseController
 		echo json_encode($autoCompleteResult);
 		
 	} //end get_sub_itemc	
+
+	public function sub_item_bom_save(){
+
+		$this->mymdsubitemsbom->sub_items_bom_entry_save();
+
+	} //end	sub_item_bom_save
+
+	public function sub_item_bom_recs() { 
+		
+		$data = $this->mymdsubitemsbom->sub_items_bom_view_recs(1, 10);
+        return view('masterdata/sub_masterdata_bom/sub-md-item-bom-recs',$data);
+		
+    }
+
+	public function sub_item_bom_recs_vw(){
+
+        $txtsearchedrec = $this->request->getVar('txtsearchedrec');
+        $mpages = $this->request->getVar('mpages');
+        $mpages = (empty($mpages) ? 0 : $mpages);
+        $data = $this->mymdsubitemsbom->sub_items_bom_view_recs($mpages, 10, $txtsearchedrec);
+        return view('masterdata/sub_masterdata_bom/sub-md-item-bom-recs', $data);
+
+    } //end sub_inv_recs_vw 
 
 }
