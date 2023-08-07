@@ -342,6 +342,7 @@ $routes->get('sub-item-bom','Md_subitems_bom::index',['filter' => 'myauthuser'])
 $routes->get('get-sub-materials','Md_subitems_bom::get_sub_materials',['filter' => 'myauthuser']);
 $routes->get('get-sub-itemc','Md_subitems_bom::get_sub_itemc',['filter' => 'myauthuser']);
 $routes->post('sub-items-bom-save','Md_subitems_bom::sub_item_bom_save',['filter' => 'myauthuser']);
+$routes->post('sub-items-bom-update','Md_subitems_bom::sub_item_bom_update',['filter' => 'myauthuser']);
 $routes->post('sub-items-bom-recs', 'Md_subitems_bom::sub_item_bom_recs',['filter' => 'myauthuser']);
 $routes->add('sub-items-bom-recs-vw', 'Md_subitems_bom::sub_item_bom_recs_vw',['filter' => 'myauthuser']);
 

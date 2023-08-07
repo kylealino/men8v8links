@@ -108,6 +108,12 @@ class Md_subitems_bom extends BaseController
 
 	} //end	sub_item_bom_save
 
+	public function sub_item_bom_update(){
+
+		$this->mymdsubitemsbom->sub_items_bom_update();
+
+	} //end	sub_item_bom_save
+
 	public function sub_item_bom_recs() { 
 		
 		$data = $this->mymdsubitemsbom->sub_items_bom_view_recs(1, 10);

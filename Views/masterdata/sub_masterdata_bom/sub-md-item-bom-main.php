@@ -84,7 +84,7 @@ $SUB_ITEM = $request->getVar('SUB_ITEM');
                                         ?>
                                         <tr>
                                           <td nowrap="nowrap">
-                                            <button type="button" class="btn btn-xs btn-danger" style="font-size:15px; padding: 2px 6px 2px 6px; " onclick="$(this).closest('tr').remove();"><i class="bi bi-x"></i></button>
+                                            <button type="button" class="btn btn-xs btn-danger" style="font-size:15px; padding: 2px 6px 2px 6px; " onclick="" disabled><i class="bi bi-x"></i></button>
                                             <input class="mitemrid" type="hidden" value=""/>
                                             <input type="hidden" value=""/>
                                           </td>
@@ -233,6 +233,63 @@ $SUB_ITEM = $request->getVar('SUB_ITEM');
    }  //end try
    return false; 
  });
+
+    $("#mbtn_mn_Update").click(function(e){
+
+    try { 
+      var sub_item = jQuery('#sub_item').val();
+         var rowCount1 = jQuery('#tbl-bom tr').length - 1;
+         var adata1 = [];
+         var mdata = '';
+
+         for(aa = 1; aa < rowCount1; aa++) { 
+           var clonedRow = jQuery('#tbl-bom tr:eq(' + aa + ')').clone(); 
+           var mitemc = jQuery(clonedRow).find('input[type=text]').eq(0).val(); 
+           var munit = jQuery(clonedRow).find('input[type=text]').eq(1).val(); 
+           var muom = jQuery(clonedRow).find('input[type=text]').eq(2).val();
+           var mcost = jQuery(clonedRow).find('input[type=text]').eq(3).val(); 
+           var mcostnet = jQuery(clonedRow).find('input[type=text]').eq(4).val(); 
+
+           mdata = mitemc + 'x|x' + munit + 'x|x' + muom + 'x|x' + mcost + 'x|x' + mcostnet ;
+           adata1.push(mdata);
+           }
+
+           var mparam = {
+            sub_item:sub_item,
+             adata1: adata1
+           };  
+
+
+      $.ajax({ 
+        type: "POST",
+        url: '<?=site_url();?>sub-items-bom-update',
+        context: document.body,
+        data: eval(mparam),
+        global: false,
+        cache: false,
+        success: function(data)  { 
+            $(this).prop('disabled', false);
+          // $.hideLoading();
+            jQuery('#memsgtestent_bod').html(data);
+            jQuery('#memsgtestent').modal('show');
+            return false;
+        },
+        error: function() {
+          alert('error loading page...');
+        // $.hideLoading();
+          return false;
+        } 
+      });
+
+    } catch(err) {
+      var mtxt = 'There was an error on this page.\n';
+      mtxt += 'Error description: ' + err.message;
+      mtxt += '\nClick OK to continue.';
+      alert(mtxt);
+    }  //end try
+    return false; 
+
+    });
 
     jQuery('#sub_item')
         // don't navigate away from the field on tab when selecting an item
