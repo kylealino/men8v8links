@@ -18,6 +18,7 @@ class MyMDSubItemsBom extends Model
         parent::__construct();
         $this->mydbname = model('App\Models\MyDBNamesModel');
         $this->db_erp = $this->mydbname->medb(0);
+        $this->db_erp1 = $this->mydbname->medb(1);
         $this->mylibzdb = model('App\Models\MyLibzDBModel');
         $this->mylibzsys = model('App\Models\MyLibzSysModel');
         $this->mymelibzsys = model('App\Models\Mymelibsys_model');
@@ -188,15 +189,10 @@ class MyMDSubItemsBom extends Model
         
         $strqry = "
         SELECT 
-        b.`ART_CODE`,
         a.`SUB_ITEM`, 
         GROUP_CONCAT(a.`SUB_ITEM_MATERIAL`) AS Sub_Materials
         FROM
         mst_sub_bom a
-        join
-        mst_cs_article b
-        on
-        a.`SUB_ITEM` = b.`SUB_ART_CODE`
         {$str_optn}
         GROUP BY `SUB_ITEM`
         ";

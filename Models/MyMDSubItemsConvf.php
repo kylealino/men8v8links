@@ -47,7 +47,7 @@ class MyMDSubItemsConvf extends Model
             b.`CONVF`,
             b.`ART_CODE`
         FROM
-        {$this->db_erp}.`trx_E0021_cs_myivty_lb_dtl` a
+        {$this->db_erp}.`trx_E0020_cs_myivty_lb_dtl` a
         JOIN
         {$this->db_erp}.`mst_cs_article` b
         ON

@@ -18,6 +18,7 @@ class MyMDSubItemsInv extends Model
         parent::__construct();
         $this->mydbname = model('App\Models\MyDBNamesModel');
         $this->db_erp = $this->mydbname->medb(0);
+        $this->db_erp1 = $this->mydbname->medb(1);
         $this->mylibzdb = model('App\Models\MyLibzDBModel');
         $this->mylibzsys = model('App\Models\MyLibzSysModel');
         $this->mymelibzsys = model('App\Models\Mymelibsys_model');
@@ -32,19 +33,17 @@ class MyMDSubItemsInv extends Model
     public function sub_items_inv_view_recs($npages = 1,$npagelimit = 10,$msearchrec='') {
         $branch_name = $this->request->getvar('branch_name');
 
+        $str="SELECT `BRNCH_NAME`,`BRNCH_OCODE2`,`BRNCH_MBCODE` FROM mst_companyBranch WHERE `BRNCH_NAME` = '$branch_name'";
+        $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+        $rw = $q->getRowArray();
+        $br_ocode2 = $rw['BRNCH_MBCODE'];
+        $mb_code = $rw['BRNCH_MBCODE'];
+        $tblSalesout = "{$this->db_erp}.`trx_{$br_ocode2}_salesout`";
+
         if (empty($branch_name)) {
             echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Info.<br/></strong><strong>User Error</strong> Please select a branch! </div>";
             die();
         }
-        
-        $str="
-            SELECT BRNCH_MBCODE FROM mst_companyBranch WHERE BRNCH_NAME = '$branch_name'
-        ";
-        $qry = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
-        $rw = $qry->getRowArray();
-        $mb_code = $rw['BRNCH_MBCODE'];
-
-        
 
         $str_optn = "";
         if(!empty($msearchrec)) { 
@@ -61,7 +60,7 @@ class MyMDSubItemsInv extends Model
             a.`SO_NET`
 
         FROM 
-            {$this->db_erp}.`trx_E0021_salesout` a
+            $tblSalesout a
         WHERE 
             MONTH(a.`SO_DATE`) = MONTH(CURDATE()) AND YEAR(a.`SO_DATE`) = YEAR(CURDATE())
             AND a.`SO_BRANCH` = '$mb_code'
@@ -102,13 +101,13 @@ class MyMDSubItemsInv extends Model
 
         //DELETE SALES RECORD IF EXISTING AND INSERT NEW
         $str="
-            SELECT * FROM trx_E0021_cs_myivty_lb_dtl WHERE `MTYPE` = 'SALES'
+            SELECT * FROM trx_E0020_cs_myivty_lb_dtl WHERE `MTYPE` = 'SALES'
         ";
         $qry = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
 
         if($qry->resultID->num_rows > 0) { 
             $str="
-                DELETE FROM trx_E0021_cs_myivty_lb_dtl WHERE `MTYPE` = 'SALES'
+                DELETE FROM trx_E0020_cs_myivty_lb_dtl WHERE `MTYPE` = 'SALES'
             ";
             $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
 		}
@@ -163,7 +162,7 @@ class MyMDSubItemsInv extends Model
                         a.`SO_MUSER`,
                         b.`SUB_DESC`
                     FROM
-                        `trx_E0021_salesout` a
+                        `trx_E0020_salesout` a
                     JOIN
                         mst_cs_article b
                     ON
@@ -185,7 +184,7 @@ class MyMDSubItemsInv extends Model
                     $TOTAL_QTY = $SO_QTY * -1;
 
                     $str="
-                    INSERT INTO .`trx_E0021_cs_myivty_lb_dtl` (
+                    INSERT INTO .`trx_E0020_cs_myivty_lb_dtl` (
                         `MBRANCH_ID`,
                         `ITEMC`,
                         `ITEM_BARCODE`,
@@ -266,14 +265,14 @@ class MyMDSubItemsInv extends Model
             a.`MQTY_CORRECTED`,
             a.`MCOST`,
             a.`MARTM_PRICE`,
-            b.`CONVF`,
+            b.`ART_NCONVF`,
             b.`ART_CODE`
         FROM
-        {$this->db_erp}.`trx_E0021_cs_myivty_lb_dtl` a
+        {$this->db_erp}.`trx_E0020_cs_myivty_lb_dtl` a
         JOIN
-        {$this->db_erp}.`mst_cs_article` b
+        {$this->db_erp}.`mst_article` b
         ON
-        a.`ITEMC` = b.`SUB_ART_CODE`
+        a.`ITEMC` = b.`ART_CODE`
         {$str_optn}
         ";
              

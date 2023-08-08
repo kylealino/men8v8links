@@ -78,13 +78,14 @@ class Md_subitems_bom extends BaseController
 		$autoCompleteResult = array();
 
 		$str = "
-		SELECT 
-		`SUB_ART_CODE`
+		SELECT
+			a.`recid`,
+			a.`ART_CODE`,
+			a.`ART_UOM`
 		FROM 
-		mst_cs_article
-		WHERE `SUB_ART_CODE` LIKE '%{$term}%'
-		GROUP BY 
-		`SUB_ART_CODE`
+			`mst_article` a
+		WHERE 
+			a.`ART_HIERC1` = '1000' AND a.`ART_CODE` LIKE '%{$term}%'
 
 		";
 
@@ -92,7 +93,7 @@ class Md_subitems_bom extends BaseController
 		if($q->getNumRows() > 0) {
 			$rrec = $q->getResultArray();
 			foreach($rrec as $row):
-				array_push($autoCompleteResult,array("value" => $row['SUB_ART_CODE']
+				array_push($autoCompleteResult,array("value" => $row['ART_CODE']
 				));
 			endforeach;
 		}

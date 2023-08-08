@@ -72,7 +72,7 @@ for($aa = 1; $aa <= $npage_count; $aa++) {
                         <td nowrap><?=$row['MQTY_CORRECTED']?></td>
                         <td nowrap><?=$row['MCOST']?></td>
                         <td nowrap><?=$row['MARTM_PRICE']?></td>
-                        <td nowrap><?=$row['CONVF']?></td>
+                        <td nowrap><?=$row['ART_NCONVF']?></td>
                         <td nowrap><?=$row['ART_CODE']?></td>
                     </tr>
                     <?php
