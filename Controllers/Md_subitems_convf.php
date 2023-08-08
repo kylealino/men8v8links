@@ -49,4 +49,10 @@ class Md_subitems_convf extends BaseController
         return view('masterdata/sub_masterdata_convf/sub-md-item-convf-main', $data);
     } 
 
+	public function sub_item_convf_save(){
+
+		$this->mymdsubitemsconvf->sub_items_convf_entry_save();
+
+	} //end	sub_item_convf_save
+
 }

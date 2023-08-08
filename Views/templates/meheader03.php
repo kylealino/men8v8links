@@ -299,14 +299,10 @@ $cuserfullname = session()->get('__xsys_myusererpfullname__');
           <i class="bi bi-gear"></i><span>Maintenance</span><i class="bi bi-chevron-down ms-auto"></i>
         </a>
         <ul id="maitenance-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="<?=site_url();?>sub-item-masterdata">
-              <i class="bi bi-circle"></i><span>Sub Item Masterdata</span>
-            </a>
-          </li>
+
           <li>
             <a href="<?=site_url();?>sub-item-inv">
-              <i class="bi bi-circle"></i><span>Sub Item Inventory</span>
+              <i class="bi bi-circle"></i><span>Convertion</span>
             </a>
           </li>
           <li>

@@ -349,7 +349,7 @@ $routes->add('sub-items-bom-recs-vw', 'Md_subitems_bom::sub_item_bom_recs_vw',['
 //Sub item Convertion
 $routes->get('sub-item-convf','Md_subitems_convf::index',['filter' => 'myauthuser']);
 $routes->add('sub-items-convf-vw', 'Md_subitems_convf::sub_item_convf_vw');
-
+$routes->post('sub-items-convf-save','Md_subitems_convf::sub_item_convf_save',['filter' => 'myauthuser']);
 /*
  * --------------------------------------------------------------------
  * Additional Routing

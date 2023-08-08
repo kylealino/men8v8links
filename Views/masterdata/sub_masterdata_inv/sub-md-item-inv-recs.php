@@ -85,7 +85,7 @@ for($aa = 1; $aa <= $npage_count; $aa++) {
 				
 			</table>
 			<div class="form-row">
-				<button type="button" class="btn bg-success btn-sm text-white" id="mbtn_mn_Save">Save</button>  
+				<button type="button" class="btn bg-success btn-sm text-white" id="mbtn_mn_Save">Process Balance</button>  
 				<?=anchor('sub-item-inv', '<i class="bi bi-arrow-repeat"></i>',' class="btn outlined-element border border-primary btn-sm" ');?>
 			</div>
 		</div>

@@ -99,19 +99,6 @@ class MyMDSubItemsInv extends Model
 
         $adata1 = $this->request->getVar('adata1');
 
-        //DELETE SALES RECORD IF EXISTING AND INSERT NEW
-        $str="
-            SELECT * FROM trx_E0020_cs_myivty_lb_dtl WHERE `MTYPE` = 'SALES'
-        ";
-        $qry = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
-
-        if($qry->resultID->num_rows > 0) { 
-            $str="
-                DELETE FROM trx_E0020_cs_myivty_lb_dtl WHERE `MTYPE` = 'SALES'
-            ";
-            $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
-		}
-
         if(count($adata1) > 0) { 
             $ame = array();
             $adatar1 = array();
@@ -130,99 +117,82 @@ class MyMDSubItemsInv extends Model
                     $mitemc = $xdata[0];
                     
                     $str="
-                    SELECT
-                        a.`SO_ITEMCODE`,
-                        a.`SO_BARCODE`,
-                        a.`SO_QTY`,
-                        a.`SO_COST`,
-                        a.`SO_SRP`,
-                        a.`SO_TAMT`,
-                        a.`SO_DISC_AMT`,
-                        a.`SO_GROSS`,
-                        a.`SO_REFUND`,
-                        a.`SO_RETURNS`,
-                        a.`SO_VOIDS`,
-                        a.`SO_NET`,
-                        a.`SO_DATE`,
-                        a.`SO_BRANCH`,
-                        a.`SO_COMP_ID`,
-                        a.`SO_BRANCH_ID`,
-                        a.`SO_OPRICE`,
-                        a.`SO_ASRP`,
-                        a.`SO_SC_DISC`,
-                        a.`SO_PWD_DISC`,
-                        a.`SO_OTHER_DISC`,
-                        a.`SO_SC_PWD_VAT_EXMP`,
-                        a.`SO_PROMO_DISC`,
-                        a.`SO_QTY_RETURN`,
-                        a.`SO_AMOUNT_RETURN`,
-                        a.`SO_TOT_QTY`,
-                        a.`SO_TAG`,
-                        a.`SO_ENCD`,
-                        a.`SO_MUSER`,
-                        b.`SUB_DESC`
-                    FROM
-                        `trx_E0020_salesout` a
+                    SELECT 
+                        a.`ITEMC`,
+                        b.`SUB_ITEM_MATERIAL`,
+                        c.`ART_BARCODE1`,
+                        c.`ART_DESC`,
+                        (b.`UNIT` * a.`MQTY_CORRECTED`) total_unit,
+                        (b.`COST` * a.`MQTY_CORRECTED`) total_cost,
+                        (b.`COST_NET` * a.`MQTY_CORRECTED`) total_cost_net
+                    FROM 
+                        `trx_E0020_cs_myivty_lb_dtl` a
                     JOIN
-                        mst_cs_article b
+                        `mst_sub_bom` b
                     ON
-                        a.`SO_ITEMCODE` = b.`SUB_ART_CODE`
-                    WHERE 
-                        MONTH(`SO_DATE`) = MONTH(CURDATE()) AND YEAR(`SO_DATE`) = YEAR(CURDATE())
-                        AND
-                        `SO_ITEMCODE` = '$mitemc'
+                        a.`ITEMC` = b.`SUB_ITEM`
+                    JOIN
+                        mst_article c
+                    ON
+                        b.`SUB_ITEM_MATERIAL` = c.`ART_CODE`
+                    WHERE
+                        a.`ITEMC` = '$mitemc'
                     ";
-                    $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
-                    $rw = $q->getRowArray();
-                    $SO_ITEMCODE = $rw['SO_ITEMCODE'];
-                    $SO_BARCODE = $rw['SO_BARCODE'];
-                    $SO_QTY = $rw['SO_QTY'];
-                    $SO_COST = $rw['SO_COST'];
-                    $SO_NET = $rw['SO_NET'];
-                    $SO_BRANCH_ID = $rw['SO_BRANCH_ID'];
-                    $SUB_DESC = $rw['SUB_DESC'];
-                    $TOTAL_QTY = $SO_QTY * -1;
 
-                    $str="
-                    INSERT INTO .`trx_E0020_cs_myivty_lb_dtl` (
-                        `MBRANCH_ID`,
-                        `ITEMC`,
-                        `ITEM_BARCODE`,
-                        `ITEM_DESC`,
-                        `MQTY`,
-                        `MQTY_CORRECTED`,
-                        `MCOST`,
-                        `SO_GROSS`,
-                        `SO_NET`,
-                        `MARTM_COST`,
-                        `MARTM_PRICE`,
-                        `MTYPE`,
-                        `MFORM_SIGN`,
-                        `MUSER`,
-                        `MLASTDELVD`,
-                        `MPROCDATE`
-                      )
-                      VALUES
-                        (
-                          '$SO_BRANCH_ID',
-                          '$SO_ITEMCODE',
-                          '$SO_BARCODE',
-                          '$SUB_DESC',
-                          '$TOTAL_QTY',
-                          '$SO_QTY',
-                          '$SO_COST',
-                          '$SO_NET',
-                          '$SO_NET',
-                          '$SO_COST',
-                          '$SO_NET',
-                          'SALES',
-                          '-',
-                          'IT-KYLE',
-                          now(),
-                          now()
-                        )
-                    ";
                     $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+                    $rw = $q->getResultArray();
+                    foreach ($rw as $data) {
+                        $SUB_ITEM_MATERIAL = $data['SUB_ITEM_MATERIAL'];
+                        $ART_BARCODE1 = $data['ART_BARCODE1'];
+                        $ART_DESC = $data['ART_DESC'];
+                        $total_unit = $data['total_unit'];
+                        $total_cost = $data['total_cost'];
+                        $total_cost_net = $data['total_cost_net'];
+                        $convf_unit = $total_unit *-1;
+
+                        $str="
+                        INSERT INTO {$this->db_erp1}.`trx_E0020_myivty_lb_dtl` (
+                            `MBRANCH_ID`,
+                            `ITEMC`,
+                            `ITEM_BARCODE`,
+                            `ITEM_DESC`,
+                            `MQTY`,
+                            `MQTY_CORRECTED`,
+                            `MCOST`,
+                            `SO_GROSS`,
+                            `SO_NET`,
+                            `MARTM_COST`,
+                            `MARTM_PRICE`,
+                            `MTYPE`,
+                            `MFORM_SIGN`,
+                            `MUSER`,
+                            `MLASTDELVD`,
+                            `MPROCDATE`
+                        )
+                        VALUES
+                            (
+                            '115',
+                            '$SUB_ITEM_MATERIAL',
+                            '$ART_BARCODE1',
+                            '$ART_DESC',
+                            '$convf_unit',
+                            '$total_unit',
+                            '$total_cost',
+                            '$total_cost_net',
+                            '$total_cost_net',
+                            '$total_cost',
+                            '$total_cost_net',
+                            'SALES',
+                            '-',
+                            'IT-KYLE',
+                            now(),
+                            now()
+                            )
+                        ";
+                        $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+                        
+                    }
+
                 }
                 
             } 
