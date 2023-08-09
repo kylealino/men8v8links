@@ -62,7 +62,7 @@ class MyMDSubItemsInv extends Model
             SUM(a.`SO_NET`) SO_NET,
             b.`SUB_DESC`
         FROM
-            $tblSalesout a
+            {$this->db_erp}.`trx_E0021CS_salesout` a
         JOIN
             {$this->db_erp}.`mst_cs_article` b
         ON
@@ -106,20 +106,24 @@ class MyMDSubItemsInv extends Model
     public function sub_inv_entry_save() {
 
         $adata1 = $this->request->getVar('adata1');
-
+        if (empty($adata1)) {
+            echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Info.<br/></strong><strong>User Error</strong> No Sales Detected! </div>";
+            die();
+        }
         //DELETE SALES RECORD IF EXISTING AND INSERT NEW
         $str="
-            SELECT * FROM {$this->db_erp}.`trx_E0020_cs_myivty_lb_dtl` WHERE `MTYPE` = 'SALES' AND MONTH(`MPROCDATE`) = MONTH(CURDATE()) AND YEAR(`MPROCDATE`) = YEAR(CURDATE())
+            SELECT * FROM {$this->db_erp}.`trx_E0021_cs_myivty_lb_dtl` WHERE `MTYPE` = 'SALES' AND MONTH(`MPROCDATE`) = MONTH(CURDATE()) AND YEAR(`MPROCDATE`) = YEAR(CURDATE())
         ";
         $qry = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
 
         if($qry->resultID->num_rows > 0) { 
             $str="
-                DELETE FROM {$this->db_erp}.`trx_E0020_cs_myivty_lb_dtl` WHERE `MTYPE` = 'SALES' AND MONTH(`MPROCDATE`) = MONTH(CURDATE()) AND YEAR(`MPROCDATE`) = YEAR(CURDATE())
+                DELETE FROM {$this->db_erp}.`trx_E0021_cs_myivty_lb_dtl` WHERE `MTYPE` = 'SALES' AND MONTH(`MPROCDATE`) = MONTH(CURDATE()) AND YEAR(`MPROCDATE`) = YEAR(CURDATE())
             ";
             $qry = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
 		}
 
+        //INSERT TO CURRENT RECORDS
         $str="
         SELECT
             a.`SO_ITEMCODE`,
@@ -127,10 +131,10 @@ class MyMDSubItemsInv extends Model
             SUM(a.`SO_QTY`) SO_QTY,
             SUM(a.`SO_COST`) SO_COST,
             a.`SO_BRANCH_ID`,
-            a.`SO_NET`,
+            SUM(a.`SO_NET`) SO_NET,
             b.`SUB_DESC`
         FROM
-            {$this->db_erp}.`trx_E0020_salesout` a
+            {$this->db_erp}.`trx_E0021CS_salesout` a
         JOIN
             {$this->db_erp}.`mst_cs_article` b
         ON
@@ -153,7 +157,7 @@ class MyMDSubItemsInv extends Model
             $TOTAL_QTY = $SO_QTY * -1;
 
             $str="
-            INSERT INTO {$this->db_erp}.`trx_E0020_cs_myivty_lb_dtl` (
+            INSERT INTO {$this->db_erp}.`trx_E0021_cs_myivty_lb_dtl` (
                 `MBRANCH_ID`,
                 `ITEMC`,
                 `ITEM_BARCODE`,
@@ -195,123 +199,103 @@ class MyMDSubItemsInv extends Model
 
         }
 
-        //DELETE SALES RECORD IF EXISTING AND INSERT NEW
+        //DELETE RECORD IF EXISTING AND INSERT NEW
         $str="
-            SELECT * FROM {$this->db_erp1}.`trx_E0020_myivty_lb_dtl` WHERE `MTYPE` = 'SALES' AND MONTH(`MPROCDATE`) = MONTH(CURDATE()) AND YEAR(`MPROCDATE`) = YEAR(CURDATE())
+            SELECT * FROM {$this->db_erp1}.`trx_E0021CS_myivty_lb_dtl` WHERE `MTYPE` = 'SALES' AND MONTH(`MPROCDATE`) = MONTH(CURDATE()) AND YEAR(`MPROCDATE`) = YEAR(CURDATE())
         ";
         $qry = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
 
         if($qry->resultID->num_rows > 0) { 
             $str="
-                DELETE FROM {$this->db_erp1}.`trx_E0020_myivty_lb_dtl` WHERE `MTYPE` = 'SALES' AND MONTH(`MPROCDATE`) = MONTH(CURDATE()) AND YEAR(`MPROCDATE`) = YEAR(CURDATE())
+                DELETE FROM {$this->db_erp1}.`trx_E0021CS_myivty_lb_dtl` WHERE `MTYPE` = 'SALES' AND MONTH(`MPROCDATE`) = MONTH(CURDATE()) AND YEAR(`MPROCDATE`) = YEAR(CURDATE())
             ";
             $qry = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
 		}
 
-
-        if(count($adata1) > 0) { 
-            $ame = array();
-            $adatar1 = array();
-
-            for($aa = 0; $aa < count($adata1); $aa++) { 
-                $medata = explode("x|x",$adata1[$aa]);
-                $mitemc = trim($medata[0]);
-
-                array_push($adatar1,$medata);
+        //INSERT TO INVENTORY
+        if(count($adata1) > 0) {
+        
+            $str="
+            SELECT 
+                a.`ITEMC`,
+                b.`SUB_ITEM_MATERIAL`,
+                c.`ART_BARCODE1`,
+                c.`ART_DESC`,
+                SUM((b.`UNIT` * (SELECT SUM(MQTY_CORRECTED) FROM {$this->db_erp}.`trx_E0021_cs_myivty_lb_dtl` WHERE ITEMC = a.`ITEMC` GROUP BY `ITEMC`))) total_unit,
+                SUM((b.`COST` * (SELECT SUM(MQTY_CORRECTED) FROM {$this->db_erp}.`trx_E0021_cs_myivty_lb_dtl` WHERE ITEMC = a.`ITEMC` GROUP BY `ITEMC`))) total_cost,
+                SUM((b.`COST_NET` * (SELECT SUM(MQTY_CORRECTED) FROM {$this->db_erp}.`trx_E0021_cs_myivty_lb_dtl` WHERE ITEMC = a.`ITEMC` GROUP BY `ITEMC`))) total_cost_net
+            FROM 
+                {$this->db_erp}.`trx_E0021_cs_myivty_lb_dtl` a
+            JOIN
+                {$this->db_erp}.`mst_sub_bom` b
+            ON
+                a.`ITEMC` = b.`SUB_ITEM`
+            JOIN
+                {$this->db_erp}.mst_article c
+            ON
+                b.`SUB_ITEM_MATERIAL` = c.`ART_CODE`
                 
+            GROUP BY
+                b.`SUB_ITEM_MATERIAL`
+            ";
+
+            $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+            $rw = $q->getResultArray();
+            foreach ($rw as $data) {
+                $SUB_ITEM_MATERIAL = $data['SUB_ITEM_MATERIAL'];
+                $ART_BARCODE1 = $data['ART_BARCODE1'];
+                $ART_DESC = $data['ART_DESC'];
+                $total_unit = $data['total_unit'];
+                $total_cost = $data['total_cost'];
+                $total_cost_net = $data['total_cost_net'];
+                $convf_unit = $total_unit *-1;
+
+                $str="
+                INSERT INTO {$this->db_erp1}.`trx_E0021CS_myivty_lb_dtl` (
+                    `MBRANCH_ID`,
+                    `ITEMC`,
+                    `ITEM_BARCODE`,
+                    `ITEM_DESC`,
+                    `MQTY`,
+                    `MQTY_CORRECTED`,
+                    `MCOST`,
+                    `SO_GROSS`,
+                    `SO_NET`,
+                    `MARTM_COST`,
+                    `MARTM_PRICE`,
+                    `MTYPE`,
+                    `MFORM_SIGN`,
+                    `MUSER`,
+                    `MLASTDELVD`,
+                    `MPROCDATE`
+                )
+                VALUES
+                    (
+                    '115',
+                    '$SUB_ITEM_MATERIAL',
+                    '$ART_BARCODE1',
+                    '$ART_DESC',
+                    '$convf_unit',
+                    '$total_unit',
+                    '$total_cost',
+                    '$total_cost_net',
+                    '$total_cost_net',
+                    '$total_cost',
+                    '$total_cost_net',
+                    'SALES',
+                    '-',
+                    'IT-KYLE',
+                    now(),
+                    now()
+                    )
+                ";
+                $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
             }
-            
-            if(count($adatar1) > 0) { 
-                for($xx = 0; $xx < count($adatar1); $xx++) { 
-                    
-                    $xdata = $adatar1[$xx];
-                    $mitemc = $xdata[0];
-                    
-                    //process balance
-                    $str="
-                    SELECT 
-                        a.`ITEMC`,
-                        b.`SUB_ITEM_MATERIAL`,
-                        c.`ART_BARCODE1`,
-                        c.`ART_DESC`,
-                        SUM((b.`UNIT` * (SELECT SUM(MQTY_CORRECTED) FROM {$this->db_erp}.`trx_E0020_cs_myivty_lb_dtl` WHERE ITEMC = a.`ITEMC` GROUP BY `ITEMC`))) total_unit,
-                        SUM((b.`COST` * (SELECT SUM(MQTY_CORRECTED) FROM {$this->db_erp}.`trx_E0020_cs_myivty_lb_dtl` WHERE ITEMC = a.`ITEMC` GROUP BY `ITEMC`))) total_cost,
-                        SUM((b.`COST_NET` * (SELECT SUM(MQTY_CORRECTED) FROM {$this->db_erp}.`trx_E0020_cs_myivty_lb_dtl` WHERE ITEMC = a.`ITEMC` GROUP BY `ITEMC`))) total_cost_net
-                    FROM 
-                        {$this->db_erp}.`trx_E0020_cs_myivty_lb_dtl` a
-                    JOIN
-                        {$this->db_erp}.`mst_sub_bom` b
-                    ON
-                        a.`ITEMC` = b.`SUB_ITEM`
-                    JOIN
-                        {$this->db_erp}.mst_article c
-                    ON
-                        b.`SUB_ITEM_MATERIAL` = c.`ART_CODE`
-                    WHERE
-                        a.`ITEMC` = '$mitemc'
-                    GROUP BY
-                        b.`SUB_ITEM_MATERIAL`
-                    ";
-
-                    $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
-                    $rw = $q->getResultArray();
-                    foreach ($rw as $data) {
-                        $SUB_ITEM_MATERIAL = $data['SUB_ITEM_MATERIAL'];
-                        $ART_BARCODE1 = $data['ART_BARCODE1'];
-                        $ART_DESC = $data['ART_DESC'];
-                        $total_unit = $data['total_unit'];
-                        $total_cost = $data['total_cost'];
-                        $total_cost_net = $data['total_cost_net'];
-                        $convf_unit = $total_unit *-1;
-
-                        $str="
-                        INSERT INTO {$this->db_erp1}.`trx_E0020_myivty_lb_dtl` (
-                            `MBRANCH_ID`,
-                            `ITEMC`,
-                            `ITEM_BARCODE`,
-                            `ITEM_DESC`,
-                            `MQTY`,
-                            `MQTY_CORRECTED`,
-                            `MCOST`,
-                            `SO_GROSS`,
-                            `SO_NET`,
-                            `MARTM_COST`,
-                            `MARTM_PRICE`,
-                            `MTYPE`,
-                            `MFORM_SIGN`,
-                            `MUSER`,
-                            `MLASTDELVD`,
-                            `MPROCDATE`
-                        )
-                        VALUES
-                            (
-                            '115',
-                            '$SUB_ITEM_MATERIAL',
-                            '$ART_BARCODE1',
-                            '$ART_DESC',
-                            '$convf_unit',
-                            '$total_unit',
-                            '$total_cost',
-                            '$total_cost_net',
-                            '$total_cost_net',
-                            '$total_cost',
-                            '$total_cost_net',
-                            'SALES',
-                            '-',
-                            'IT-KYLE',
-                            now(),
-                            now()
-                            )
-                        ";
-                        $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
-                        
-                    }
-
-                }
-                
-            } 
-                
+        }else{
+            echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Info.<br/></strong><strong>User Error</strong> No Sales Detected! </div>";
+            die();
         }
+        
 
         echo "<div class=\"alert alert-success mb-0\" role=\"alert\"><strong>Info.<br/></strong><strong>Success</strong> Data Recorded Successfully!!! </div>
         <script type=\"text/javascript\"> 
@@ -352,7 +336,7 @@ class MyMDSubItemsInv extends Model
             b.`ART_NCONVF`,
             b.`ART_CODE`
         FROM
-        {$this->db_erp}.`trx_E0020_cs_myivty_lb_dtl` a
+        {$this->db_erp}.`trx_E0021_cs_myivty_lb_dtl` a
         JOIN
         {$this->db_erp}.`mst_article` b
         ON
