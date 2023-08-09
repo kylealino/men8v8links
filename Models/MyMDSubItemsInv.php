@@ -53,18 +53,26 @@ class MyMDSubItemsInv extends Model
         }
         
         $strqry = "
-        SELECT 
+        SELECT
             a.`SO_ITEMCODE`,
             a.`SO_BARCODE`,
-            a.`SO_QTY`,
-            a.`SO_NET`
-
-        FROM 
+            SUM(a.`SO_QTY`) SO_QTY,
+            SUM(a.`SO_COST`) SO_COST,
+            a.`SO_BRANCH_ID`,
+            SUM(a.`SO_NET`) SO_NET,
+            b.`SUB_DESC`
+        FROM
             $tblSalesout a
+        JOIN
+            {$this->db_erp}.`mst_cs_article` b
+        ON
+            a.`SO_ITEMCODE` = b.`SUB_ART_CODE`
         WHERE 
-            MONTH(a.`SO_DATE`) = MONTH(CURDATE()) AND YEAR(a.`SO_DATE`) = YEAR(CURDATE())
+            MONTH(`SO_DATE`) = MONTH(CURDATE()) AND YEAR(`SO_DATE`) = YEAR(CURDATE())
             AND a.`SO_BRANCH` = '$mb_code'
             {$str_optn}
+        GROUP BY 
+            a.`SO_ITEMCODE`
         ";
              
         $str = "
@@ -99,6 +107,108 @@ class MyMDSubItemsInv extends Model
 
         $adata1 = $this->request->getVar('adata1');
 
+        //DELETE SALES RECORD IF EXISTING AND INSERT NEW
+        $str="
+            SELECT * FROM {$this->db_erp}.`trx_E0020_cs_myivty_lb_dtl` WHERE `MTYPE` = 'SALES' AND MONTH(`MPROCDATE`) = MONTH(CURDATE()) AND YEAR(`MPROCDATE`) = YEAR(CURDATE())
+        ";
+        $qry = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+
+        if($qry->resultID->num_rows > 0) { 
+            $str="
+                DELETE FROM {$this->db_erp}.`trx_E0020_cs_myivty_lb_dtl` WHERE `MTYPE` = 'SALES' AND MONTH(`MPROCDATE`) = MONTH(CURDATE()) AND YEAR(`MPROCDATE`) = YEAR(CURDATE())
+            ";
+            $qry = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+		}
+
+        $str="
+        SELECT
+            a.`SO_ITEMCODE`,
+            a.`SO_BARCODE`,
+            SUM(a.`SO_QTY`) SO_QTY,
+            SUM(a.`SO_COST`) SO_COST,
+            a.`SO_BRANCH_ID`,
+            a.`SO_NET`,
+            b.`SUB_DESC`
+        FROM
+            {$this->db_erp}.`trx_E0020_salesout` a
+        JOIN
+            {$this->db_erp}.`mst_cs_article` b
+        ON
+            a.`SO_ITEMCODE` = b.`SUB_ART_CODE`
+        WHERE 
+            MONTH(`SO_DATE`) = MONTH(CURDATE()) AND YEAR(`SO_DATE`) = YEAR(CURDATE())
+        GROUP BY 
+            a.`SO_ITEMCODE`
+        ";
+        $qry = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+        $rw = $qry->getResultArray();
+        foreach ($rw as $data) {
+            $SO_ITEMCODE = $data['SO_ITEMCODE'];
+            $SO_BARCODE = $data['SO_BARCODE'];
+            $SO_QTY = $data['SO_QTY'];
+            $SO_COST = $data['SO_COST'];
+            $SO_NET = $data['SO_NET'];
+            $SO_BRANCH_ID = $data['SO_BRANCH_ID'];
+            $SUB_DESC = $data['SUB_DESC'];
+            $TOTAL_QTY = $SO_QTY * -1;
+
+            $str="
+            INSERT INTO {$this->db_erp}.`trx_E0020_cs_myivty_lb_dtl` (
+                `MBRANCH_ID`,
+                `ITEMC`,
+                `ITEM_BARCODE`,
+                `ITEM_DESC`,
+                `MQTY`,
+                `MQTY_CORRECTED`,
+                `MCOST`,
+                `SO_GROSS`,
+                `SO_NET`,
+                `MARTM_COST`,
+                `MARTM_PRICE`,
+                `MTYPE`,
+                `MFORM_SIGN`,
+                `MUSER`,
+                `MLASTDELVD`,
+                `MPROCDATE`
+            )
+            VALUES
+                (
+                '$SO_BRANCH_ID',
+                '$SO_ITEMCODE',
+                '$SO_BARCODE',
+                '$SUB_DESC',
+                '$TOTAL_QTY',
+                '$SO_QTY',
+                '$SO_COST',
+                '$SO_NET',
+                '$SO_NET',
+                '$SO_COST',
+                '$SO_NET',
+                'SALES',
+                '-',
+                'IT-KYLE',
+                now(),
+                now()
+                )
+            ";
+            $qry = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+
+        }
+
+        //DELETE SALES RECORD IF EXISTING AND INSERT NEW
+        $str="
+            SELECT * FROM {$this->db_erp1}.`trx_E0020_myivty_lb_dtl` WHERE `MTYPE` = 'SALES' AND MONTH(`MPROCDATE`) = MONTH(CURDATE()) AND YEAR(`MPROCDATE`) = YEAR(CURDATE())
+        ";
+        $qry = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+
+        if($qry->resultID->num_rows > 0) { 
+            $str="
+                DELETE FROM {$this->db_erp1}.`trx_E0020_myivty_lb_dtl` WHERE `MTYPE` = 'SALES' AND MONTH(`MPROCDATE`) = MONTH(CURDATE()) AND YEAR(`MPROCDATE`) = YEAR(CURDATE())
+            ";
+            $qry = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+		}
+
+
         if(count($adata1) > 0) { 
             $ame = array();
             $adatar1 = array();
@@ -108,35 +218,39 @@ class MyMDSubItemsInv extends Model
                 $mitemc = trim($medata[0]);
 
                 array_push($adatar1,$medata);
-            }  
-           
+                
+            }
+            
             if(count($adatar1) > 0) { 
                 for($xx = 0; $xx < count($adatar1); $xx++) { 
                     
                     $xdata = $adatar1[$xx];
                     $mitemc = $xdata[0];
                     
+                    //process balance
                     $str="
                     SELECT 
                         a.`ITEMC`,
                         b.`SUB_ITEM_MATERIAL`,
                         c.`ART_BARCODE1`,
                         c.`ART_DESC`,
-                        (b.`UNIT` * a.`MQTY_CORRECTED`) total_unit,
-                        (b.`COST` * a.`MQTY_CORRECTED`) total_cost,
-                        (b.`COST_NET` * a.`MQTY_CORRECTED`) total_cost_net
+                        SUM((b.`UNIT` * (SELECT SUM(MQTY_CORRECTED) FROM {$this->db_erp}.`trx_E0020_cs_myivty_lb_dtl` WHERE ITEMC = a.`ITEMC` GROUP BY `ITEMC`))) total_unit,
+                        SUM((b.`COST` * (SELECT SUM(MQTY_CORRECTED) FROM {$this->db_erp}.`trx_E0020_cs_myivty_lb_dtl` WHERE ITEMC = a.`ITEMC` GROUP BY `ITEMC`))) total_cost,
+                        SUM((b.`COST_NET` * (SELECT SUM(MQTY_CORRECTED) FROM {$this->db_erp}.`trx_E0020_cs_myivty_lb_dtl` WHERE ITEMC = a.`ITEMC` GROUP BY `ITEMC`))) total_cost_net
                     FROM 
-                        `trx_E0020_cs_myivty_lb_dtl` a
+                        {$this->db_erp}.`trx_E0020_cs_myivty_lb_dtl` a
                     JOIN
-                        `mst_sub_bom` b
+                        {$this->db_erp}.`mst_sub_bom` b
                     ON
                         a.`ITEMC` = b.`SUB_ITEM`
                     JOIN
-                        mst_article c
+                        {$this->db_erp}.mst_article c
                     ON
                         b.`SUB_ITEM_MATERIAL` = c.`ART_CODE`
                     WHERE
                         a.`ITEMC` = '$mitemc'
+                    GROUP BY
+                        b.`SUB_ITEM_MATERIAL`
                     ";
 
                     $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);

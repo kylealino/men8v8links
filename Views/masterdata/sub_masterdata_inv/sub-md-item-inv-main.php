@@ -60,7 +60,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header mb-3">
-                    <h3 class="h4 mb-0"> <i class="bi bi-pencil-square"></i> Sub Inventory Records</h3>
+                    <h3 class="h4 mb-0"> <i class="bi bi-pencil-square"></i> Current Inventory Records</h3>
                 </div>
                 <div class="card-body">
                     <div id="subitems" class="text-center p-2 rounded-3  mt-3 border-dotted bg-light p-4 ">
