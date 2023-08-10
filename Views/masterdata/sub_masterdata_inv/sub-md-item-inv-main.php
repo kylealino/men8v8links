@@ -30,6 +30,7 @@ $str="
 $q = $mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
 $rw = $q->getRowArray();
 $active_branch = $rw['BRNCH_NAME'];
+
 ?>
 <main id="main">
     <div class="pagetitle">
