@@ -7,10 +7,29 @@
  * 	description : Sub Masterdata Main
  */
 
-// $request = \Config\Services::request();
-// $mylibzdb = model('App\Models\MyLibzDBModel');
-// $mylibzsys = model('App\Models\MyLibzSysModel');
-
+$request = \Config\Services::request();
+$mylibzdb = model('App\Models\MyLibzDBModel');
+$mylibzsys = model('App\Models\MyLibzSysModel');
+$myusermod = model('App\Models\MyUserModel');
+$cuser = $myusermod->mysys_user();
+$active_branch = '';
+$str="
+    SELECT 
+        a.`myusername`,
+        a.`myuabranch`,
+        b.`BRNCH_NAME`
+    FROM
+        myua_branch a
+    JOIN
+        mst_companyBranch b
+    ON
+        a.`myuabranch` = b.`recid`
+    WHERE
+        a.`myusername` = '$cuser'
+";
+$q = $mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+$rw = $q->getRowArray();
+$active_branch = $rw['BRNCH_NAME'];
 ?>
 <main id="main">
     <div class="pagetitle">
@@ -35,7 +54,7 @@
                             <div class="col-sm-12">
                                 <h6 class="card-title p-0">Select branch:</h6>
                                 <div class="input-group input-group-sm ">
-                                    <input type="text"  placeholder="Branch Name" id="branch_name" name="branch_name" class="branch_name form-control form-control-sm " required autocomplete="off" aria-describedby="basic-addon1"/>
+                                    <input type="text"  placeholder="Branch Name" id="branch_name" name="branch_name" class="branch_name form-control form-control-sm " required autocomplete="off" aria-describedby="basic-addon1" value="<?=$active_branch;?>"/>
                                     <input type="hidden"  placeholder="Branch Name" id="branch_code" name="branch_code" class="branch_code form-control form-control-sm " required/>
                                     <div class="input-group-prepend" id="basic-addon1">
                                         <button type="button" id="mbtn_vw_recs" name="mbtn_vw_recs" class="btn btn-primary btn-sm m-0 rounded-0 rounded-end mbtn_vw_recs" ><i class="bi bi-search"></i> View</button>
