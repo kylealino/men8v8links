@@ -15,7 +15,7 @@ use App\Models\MyDatummodel;
 use App\Models\MyDatauaModel;
 use App\Models\MyWarehouseoutModel;
 use App\Models\MyLibzDBModel;
-use App\Models\MyMDCSBom;
+use App\Models\MyMDCSBomModel;
 
 use App\Libraries\Fpdf\Mypdf;
 class MdCs_subitems_bom extends BaseController 
@@ -26,7 +26,7 @@ class MdCs_subitems_bom extends BaseController
 		$this->mydbname = model('App\Models\MyDBNamesModel');
 		$this->db_erp = $this->mydbname->medb(0);
 		$this->mylibzdb = new MyLibzDBModel();
-		$this->mymdsubitemsbom = new MyMDCSBom();
+		$this->mymdsubitemsbom = new MyMDCSBomModel();
 		$this->request = \Config\Services::request();
    		$this->db = \Config\Database::connect();
 	}
@@ -72,7 +72,7 @@ class MdCs_subitems_bom extends BaseController
 		
 	} 
 
-	public function get_mdc(){
+	public function get_sub_itemc(){
 		
 		$term    = $this->request->getVar('term');
 		$autoCompleteResult = array();

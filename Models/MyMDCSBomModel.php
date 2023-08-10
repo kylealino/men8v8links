@@ -11,7 +11,7 @@
 namespace App\Models;
 use CodeIgniter\Model;
 
-class MyMDCSBom extends Model
+class MyMDCSBomModel extends Model
 {
     public function __construct()
     {
@@ -37,25 +37,6 @@ class MyMDCSBom extends Model
         //empty fields
         if (empty($sub_item)) {
             echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Info.<br/></strong><strong>User Error</strong> Please select a Sub Itemcode! </div>";
-            die();
-        }
-
-        //validate valid sub item code
-        $str = "
-            SELECT 
-                `SUB_ART_CODE`
-            FROM 
-                mst_cs_article
-            WHERE `SUB_ART_CODE` LIKE '%{$sub_item}%'
-            GROUP BY 
-            `SUB_ART_CODE`
-        ";
-
-        $q =  $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
-        if($q->getNumRows() > 0) {
-
-        }else{
-            echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Info.<br/></strong><strong>User Error</strong> Invalid item '$sub_item'! </div>";
             die();
         }
 
@@ -232,25 +213,6 @@ class MyMDCSBom extends Model
         //empty fields
         if (empty($sub_item)) {
             echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Info.<br/></strong><strong>User Error</strong> Please select a Sub Itemcode! </div>";
-            die();
-        }
-
-        //validate valid sub item code
-        $str = "
-            SELECT 
-                `SUB_ART_CODE`
-            FROM 
-                mst_cs_article
-            WHERE `SUB_ART_CODE` LIKE '%{$sub_item}%'
-            GROUP BY 
-            `SUB_ART_CODE`
-        ";
-
-        $q =  $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
-        if($q->getNumRows() > 0) {
-
-        }else{
-            echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Info.<br/></strong><strong>User Error</strong> Invalid item '$sub_item'! </div>";
             die();
         }
 

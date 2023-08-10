@@ -15,7 +15,7 @@ use App\Models\MyDatummodel;
 use App\Models\MyDatauaModel;
 use App\Models\MyWarehouseoutModel;
 use App\Models\MyLibzDBModel;
-use App\Models\MyMDCSConvf;
+use App\Models\MyMDCSConvfModel;
 
 use App\Libraries\Fpdf\Mypdf;
 class MdCs_subitems_convf extends BaseController 
@@ -26,7 +26,7 @@ class MdCs_subitems_convf extends BaseController
 		$this->mydbname = model('App\Models\MyDBNamesModel');
 		$this->db_erp = $this->mydbname->medb(0);
 		$this->mylibzdb = new MyLibzDBModel();
-		$this->mymdsubitemsinv = new MyMDCSConvf();
+		$this->mymdsubitemsinv = new MyMDCSConvfModel();
 		$this->request = \Config\Services::request();
    		$this->db = \Config\Database::connect();
 	}

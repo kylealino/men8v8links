@@ -11,7 +11,7 @@
 namespace App\Models;
 use CodeIgniter\Model;
 
-class MyMDConvertion extends Model
+class MyMDSubItemsInv extends Model
 {
     public function __construct()
     {

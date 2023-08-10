@@ -1,7 +1,7 @@
 <?php namespace App\Controllers;
 
 /**
- *	File        : app/Controllers/MdCs_subitems_convf.php
+ *	File        : app/Controllers/Md_subitems_convf.php
  *  Auhtor      : Kyle Alino
  *  Date Created: Jul 28, 2023
  * 	last update : Jul 28, 2023
@@ -18,7 +18,7 @@ use App\Models\MyLibzDBModel;
 use App\Models\MyMDSubItemsConvf;
 
 use App\Libraries\Fpdf\Mypdf;
-class MdCs_subitems_convf extends BaseController 
+class Md_subitems_convf extends BaseController 
 { 
 	
 	public function __construct()

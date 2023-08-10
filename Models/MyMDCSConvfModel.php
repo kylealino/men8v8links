@@ -11,7 +11,7 @@
 namespace App\Models;
 use CodeIgniter\Model;
 
-class MyMDCSConvf extends Model
+class MyMDCSConvfModel extends Model
 {
     public function __construct()
     {
@@ -53,13 +53,13 @@ class MyMDCSConvf extends Model
             SUM(a.`SO_COST`) SO_COST,
             a.`SO_BRANCH_ID`,
             SUM(a.`SO_NET`) SO_NET,
-            b.`SUB_DESC`
+            b.`ART_DESC`
         FROM
             {$this->db_erp}.`trx_E0021CS_salesout` a
         JOIN
-            {$this->db_erp}.`mst_cs_article` b
+            {$this->db_erp}.`mst_article` b
         ON
-            a.`SO_ITEMCODE` = b.`SUB_ART_CODE`
+            a.`SO_ITEMCODE` = b.`ART_CODE`
         WHERE 
             MONTH(`SO_DATE`) = MONTH(CURDATE()) AND YEAR(`SO_DATE`) = YEAR(CURDATE())
             {$str_optn}
