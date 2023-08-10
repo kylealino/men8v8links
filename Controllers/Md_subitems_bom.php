@@ -1,7 +1,7 @@
 <?php namespace App\Controllers;
 
 /**
- *	File        : app/Controllers/Md_subitems_bom.php
+ *	File        : app/Controllers/Md_bom.php
  *  Auhtor      : Kyle Alino
  *  Date Created: Jul 28, 2023
  * 	last update : Jul 28, 2023
@@ -72,7 +72,7 @@ class Md_subitems_bom extends BaseController
 		
 	} //end get_sub_materials	
 
-	public function get_sub_itemc(){
+	public function get_mdc(){
 		
 		$term    = $this->request->getVar('term');
 		$autoCompleteResult = array();
@@ -101,19 +101,19 @@ class Md_subitems_bom extends BaseController
 		$q->freeResult();
 		echo json_encode($autoCompleteResult);
 		
-	} //end get_sub_itemc	
+	} //end get_mdc	
 
 	public function sub_item_bom_save(){
 
 		$this->mymdsubitemsbom->sub_items_bom_entry_save();
 
-	} //end	sub_item_bom_save
+	} //end	md_bom_save
 
 	public function sub_item_bom_update(){
 
 		$this->mymdsubitemsbom->sub_items_bom_update();
 
-	} //end	sub_item_bom_save
+	} //end	md_bom_save
 
 	public function sub_item_bom_recs() { 
 		

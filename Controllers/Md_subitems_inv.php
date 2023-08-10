@@ -1,7 +1,7 @@
 <?php namespace App\Controllers;
 
 /**
- *	File        : app/Controllers/Md_subitems.php
+ *	File        : app/Controllers/Md_subitems_inv.php
  *  Auhtor      : Kyle Alino
  *  Date Created: Jul 28, 2023
  * 	last update : Jul 28, 2023
@@ -71,7 +71,7 @@ class Md_subitems_inv extends BaseController
 		
 	} //end get_branch
 
-	public function sub_item_recs() { 
+	public function sub_inv_recs() { 
 		
 		$data = $this->mymdsubitemsinv->sub_items_inv_view_recs(1, 10);
         return view('masterdata/sub_masterdata_inv/sub-md-item-inv-recs',$data);

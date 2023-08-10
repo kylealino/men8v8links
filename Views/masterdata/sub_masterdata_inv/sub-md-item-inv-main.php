@@ -163,7 +163,7 @@ function sub_items_view_convf(){
 
       $.ajax({ 
         type: "POST",
-        url: '<?=site_url();?>sub-inv-recs-vw',
+        url: '<?=site_url();?>sub-inv-recs',
         context: document.body,
         data: eval(mparam),
         global: false,

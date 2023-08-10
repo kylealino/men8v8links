@@ -11,7 +11,7 @@
 namespace App\Models;
 use CodeIgniter\Model;
 
-class MyMDSubItemsInv extends Model
+class MyMDConvertion extends Model
 {
     public function __construct()
     {
@@ -31,6 +31,19 @@ class MyMDSubItemsInv extends Model
 
 
     public function sub_items_inv_view_recs($npages = 1,$npagelimit = 10,$msearchrec='') {
+        $branch_name = $this->request->getvar('branch_name');
+
+        $str="SELECT `BRNCH_NAME`,`BRNCH_OCODE2`,`BRNCH_MBCODE` FROM mst_companyBranch WHERE `BRNCH_NAME` = '$branch_name'";
+        $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+        $rw = $q->getRowArray();
+        $br_ocode2 = $rw['BRNCH_MBCODE'];
+        $mb_code = $rw['BRNCH_MBCODE'];
+        $tblSalesout = "{$this->db_erp}.`trx_{$br_ocode2}CS_salesout`";
+
+        if (empty($branch_name)) {
+            echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Info.<br/></strong><strong>User Error</strong> Please select a branch! </div>";
+            die();
+        }
 
         $str_optn = "";
         if(!empty($msearchrec)) { 
@@ -49,13 +62,15 @@ class MyMDSubItemsInv extends Model
             SUM(a.`SO_NET`) SO_NET,
             b.`SUB_DESC`
         FROM
-            {$this->db_erp}.`trx_E0021CS_salesout` a
+            $tblSalesout a
         JOIN
             {$this->db_erp}.`mst_cs_article` b
         ON
             a.`SO_ITEMCODE` = b.`SUB_ART_CODE`
+
         WHERE 
             MONTH(`SO_DATE`) = MONTH(CURDATE()) AND YEAR(`SO_DATE`) = YEAR(CURDATE())
+            AND a.`SO_BRANCH` = '$mb_code'
             {$str_optn}
         GROUP BY 
             a.`SO_ITEMCODE`
@@ -90,6 +105,14 @@ class MyMDSubItemsInv extends Model
     }
 
     public function sub_inv_entry_save() {
+        $branch_name = $this->request->getvar('branch_name');
+
+        $str="SELECT `BRNCH_NAME`,`BRNCH_OCODE2`,`BRNCH_MBCODE` FROM mst_companyBranch WHERE `BRNCH_NAME` = '$branch_name'";
+        $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+        $rw = $q->getRowArray();
+        $br_ocode2 = $rw['BRNCH_MBCODE'];
+
+        $tblSalesout = "{$this->db_erp}.`trx_{$br_ocode2}CS_salesout`";
 
         $adata1 = $this->request->getVar('adata1');
         if (empty($adata1)) {
@@ -120,7 +143,7 @@ class MyMDSubItemsInv extends Model
             SUM(a.`SO_NET`) SO_NET,
             b.`SUB_DESC`
         FROM
-            {$this->db_erp}.`trx_E0021CS_salesout` a
+            $tblSalesout a
         JOIN
             {$this->db_erp}.`mst_cs_article` b
         ON
