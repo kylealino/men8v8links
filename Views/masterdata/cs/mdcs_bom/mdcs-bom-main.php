@@ -117,10 +117,10 @@ $SUB_ITEM = $request->getVar('SUB_ITEM');
                       <div class="col-sm-4">
                           <?php if(!empty($SUB_ITEM)):?>
                             <button id="mbtn_mn_Update" type="submit" class="btn btn-primary btn-sm">Update</button>
-                            <?=anchor('sub-item-bom', '<i class="bi bi-arrow-repeat"></i>',' class="btn btn-outline-success btn-sm" ');?>
+                            <?=anchor('cs-sub-item-bom', '<i class="bi bi-arrow-repeat"></i>',' class="btn btn-outline-success btn-sm" ');?>
                           <?php else:?>
                             <button id="mbtn_mn_Save" type="submit" class="btn btn-success btn-sm">Save</button>
-                            <?=anchor('sub-item-bom', '<i class="bi bi-arrow-repeat"></i>',' class="btn btn-outline-success btn-sm" ');?>
+                            <?=anchor('cs-sub-item-bom', '<i class="bi bi-arrow-repeat"></i>',' class="btn btn-outline-success btn-sm" ');?>
                           <?php endif;?>
                       </div>
                     </div>
@@ -166,7 +166,7 @@ $SUB_ITEM = $request->getVar('SUB_ITEM');
     var ajaxRequest;
 
     ajaxRequest = jQuery.ajax({
-        url: "<?=site_url();?>sub-items-bom-recs",
+        url: "<?=site_url();?>cs-sub-items-bom-recs",
         type: "post"
     });
 
@@ -206,7 +206,7 @@ $SUB_ITEM = $request->getVar('SUB_ITEM');
            
            $.ajax({ 
              type: "POST",
-             url: '<?=site_url();?>sub-items-bom-save',
+             url: '<?=site_url();?>cs-sub-items-bom-save',
              context: document.body,
              data: eval(mparam),
              global: false,
@@ -262,7 +262,7 @@ $SUB_ITEM = $request->getVar('SUB_ITEM');
 
       $.ajax({ 
         type: "POST",
-        url: '<?=site_url();?>sub-items-bom-update',
+        url: '<?=site_url();?>cs-sub-items-bom-update',
         context: document.body,
         data: eval(mparam),
         global: false,

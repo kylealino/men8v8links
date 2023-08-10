@@ -300,12 +300,12 @@ $cuserfullname = session()->get('__xsys_myusererpfullname__');
         </a>
         <ul id="maitenance-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
           <li>
-            <a href="<?=site_url();?>sub-item-inv">
+            <a href="<?=site_url();?>cs-sub-item-convf">
               <i class="bi bi-circle"></i><span>CONVERTION</span>
             </a>
           </li>
           <li>
-            <a href="<?=site_url();?>sub-item-bom">
+            <a href="<?=site_url();?>cs-sub-item-bom">
               <i class="bi bi-circle"></i><span>BOM</span>
             </a>
           </li>

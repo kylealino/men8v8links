@@ -33,7 +33,7 @@ for($aa = 1; $aa <= $npage_count; $aa++) {
 	}
 </style>
 
-<?=form_open('sub-inv-recs-vw','class="needs-validation-search" id="myfrmsearchrec" ');?>
+<?=form_open('cs-sub-convf-recs-vw','class="needs-validation-search" id="myfrmsearchrec" ');?>
 <div class="col-md-6 mb-1">
 	<div class="input-group input-group-sm">
 		<label class="input-group-text fw-bold" for="search">Search:</label>
@@ -86,7 +86,7 @@ for($aa = 1; $aa <= $npage_count; $aa++) {
 			</table>
 			<div class="form-row">
 				<button type="button" class="btn bg-success btn-sm text-white" id="mbtn_mn_Save">Process Balance</button>  
-				<?=anchor('sub-item-inv', '<i class="bi bi-arrow-repeat"></i>',' class="btn outlined-element border border-primary btn-sm" ');?>
+				<?=anchor('cs-sub-item-convf', '<i class="bi bi-arrow-repeat"></i>',' class="btn outlined-element border border-primary btn-sm" ');?>
 			</div>
 		</div>
 	</div> <!-- end table-reponsive -->
@@ -111,7 +111,7 @@ function __myredirected_rsearch(mobj) {
             };	
 			jQuery.ajax({ // default declaration of ajax parameters
 				type: "POST",
-				url: '<?=site_url();?>sub-inv-recs-vw',
+				url: '<?=site_url();?>cs-sub-convf-recs-vw',
 				context: document.body,
 				data: eval(mparam),
 				global: false,
@@ -155,7 +155,7 @@ function __myredirected_rsearch(mobj) {
 
 				jQuery.ajax({ // default declaration of ajax parameters
 					type: "POST",
-					url: '<?=site_url();?>sub-inv-recs-vw',
+					url: '<?=site_url();?>cs-sub-convf-recs-vw',
 					context: document.body,
 					data: eval(mparam),
 					global: false,
@@ -216,7 +216,7 @@ function __myredirected_rsearch(mobj) {
 						
 						jQuery.ajax({ // default declaration of ajax parameters
 							type: "POST",
-							url: '<?=site_url();?>sub-inv-recs-vw',
+							url: '<?=site_url();?>cs-sub-convf-recs-vw',
 							context: document.body,
 							data: eval(mparam),
 							global: false,
@@ -287,7 +287,7 @@ function __myredirected_rsearch(mobj) {
 
       $.ajax({ 
         type: "POST",
-        url: '<?=site_url();?>sub-inv-save',
+        url: '<?=site_url();?>cs-sub-convf-save',
         context: document.body,
         data: eval(mparam),
         global: false,

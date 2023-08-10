@@ -1,7 +1,7 @@
 <?php namespace App\Controllers;
 
 /**
- *	File        : app/Controllers/Md_subitems_inv.php
+ *	File        : app/Controllers/MdCs_subitems_convf.php
  *  Auhtor      : Kyle Alino
  *  Date Created: Jul 28, 2023
  * 	last update : Jul 28, 2023
@@ -15,10 +15,10 @@ use App\Models\MyDatummodel;
 use App\Models\MyDatauaModel;
 use App\Models\MyWarehouseoutModel;
 use App\Models\MyLibzDBModel;
-use App\Models\MyMDSubItemsInv;
+use App\Models\MyMDCSConvf;
 
 use App\Libraries\Fpdf\Mypdf;
-class Md_subitems_inv extends BaseController 
+class MdCs_subitems_convf extends BaseController 
 { 
 	
 	public function __construct()
@@ -26,7 +26,7 @@ class Md_subitems_inv extends BaseController
 		$this->mydbname = model('App\Models\MyDBNamesModel');
 		$this->db_erp = $this->mydbname->medb(0);
 		$this->mylibzdb = new MyLibzDBModel();
-		$this->mymdsubitemsinv = new MyMDSubItemsInv();
+		$this->mymdsubitemsinv = new MyMDCSConvf();
 		$this->request = \Config\Services::request();
    		$this->db = \Config\Database::connect();
 	}
@@ -34,7 +34,7 @@ class Md_subitems_inv extends BaseController
 	public function index(){
 
 		echo view('templates/meheader03');
-		echo view('masterdata/sub_masterdata_inv/sub-md-item-inv-main');
+		echo view('masterdata/cs/mdcs_convf/mdcs-convf-main');
 		echo view('templates/mefooter01');
 
 	} 
@@ -74,7 +74,7 @@ class Md_subitems_inv extends BaseController
 	public function sub_inv_recs() { 
 		
 		$data = $this->mymdsubitemsinv->sub_items_inv_view_recs(1, 10);
-        return view('masterdata/sub_masterdata_inv/sub-md-item-inv-recs',$data);
+        return view('masterdata/cs/mdcs_convf/mdcs-convf-recs',$data);
 		
     }
 
@@ -84,14 +84,14 @@ class Md_subitems_inv extends BaseController
         $mpages = $this->request->getVar('mpages');
         $mpages = (empty($mpages) ? 0 : $mpages);
         $data = $this->mymdsubitemsinv->sub_items_inv_view_recs($mpages, 10, $txtsearchedrec);
-        return view('masterdata/sub_masterdata_inv/sub-md-item-inv-recs', $data);
+        return view('masterdata/cs/mdcs_convf/mdcs-convf-recs', $data);
 
     } //end sub_inv_recs_vw
 	
 	public function sub_inv_recs_convf() { 
 		
 		$data = $this->mymdsubitemsinv->sub_items_inv_view_recs_convf(1, 10);
-        return view('masterdata/sub_masterdata_inv/sub-md-item-inv-recs-vw',$data);
+        return view('masterdata/cs/mdcs_convf/mdcs-convf-recs-vw',$data);
 		
     }
 
@@ -101,7 +101,7 @@ class Md_subitems_inv extends BaseController
         $mpages = $this->request->getVar('mpages');
         $mpages = (empty($mpages) ? 0 : $mpages);
         $data = $this->mymdsubitemsinv->sub_items_inv_view_recs_convf($mpages, 10, $txtsearchedrec);
-        return view('masterdata/sub_masterdata_inv/sub-md-item-inv-recs-vw', $data);
+        return view('masterdata/cs/mdcs_convf/mdcs-convf-recs-vw', $data);
 
     } //end sub_inv_recs_vw 
 

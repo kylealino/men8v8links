@@ -328,23 +328,23 @@ $routes->get('get-uom','Md_subitems::get_uom',['filter' => 'myauthuser']);
 $routes->post('sub-items-update','Md_subitems::sub_item_update',['filter' => 'myauthuser']);
 $routes->add('sub-items-recs-vw', 'Md_subitems::sub_item_recs_vw');
 
-//Sub Item Invetory Insertion
-$routes->get('sub-item-inv','Md_subitems_inv::index',['filter' => 'myauthuser']);
-$routes->get('get-branch','Md_subitems_inv::get_branch',['filter' => 'myauthuser']);
-$routes->post('sub-inv-recs', 'Md_subitems_inv::sub_inv_recs_vw',['filter' => 'myauthuser']);
-$routes->add('sub-inv-recs-vw', 'Md_subitems_inv::sub_inv_recs_vw',['filter' => 'myauthuser']);
-$routes->post('sub-inv-recs-convf', 'Md_subitems_inv::sub_inv_recs_convf',['filter' => 'myauthuser']);
-$routes->add('sub-inv-recs-vw-convf', 'Md_subitems_inv::sub_inv_recs_vw_convf',['filter' => 'myauthuser']);
-$routes->post('sub-inv-save','Md_subitems_inv::sub_inv_save',['filter' => 'myauthuser']);
+//CS Sub Item Convertion
+$routes->get('cs-sub-item-convf','MdCs_subitems_convf::index',['filter' => 'myauthuser']);
+$routes->post('cs-sub-convf-recs', 'MdCs_subitems_convf::sub_inv_recs_vw',['filter' => 'myauthuser']);
+$routes->add('cs-sub-convf-recs-vw', 'MdCs_subitems_convf::sub_inv_recs_vw',['filter' => 'myauthuser']);
+$routes->post('cs-sub-convf-cur-recs', 'MdCs_subitems_convf::sub_inv_recs_convf',['filter' => 'myauthuser']);
+$routes->add('cs-sub-convf-cur-recs-vw', 'MdCs_subitems_convf::sub_inv_recs_vw_convf',['filter' => 'myauthuser']);
+$routes->post('cs-sub-convf-save','MdCs_subitems_convf::sub_inv_save',['filter' => 'myauthuser']);
+$routes->get('get-branch','MdCs_subitems_convf::get_branch',['filter' => 'myauthuser']);
 
-//Sub Item BOM
-$routes->get('sub-item-bom','Md_subitems_bom::index',['filter' => 'myauthuser']);
-$routes->get('get-sub-materials','Md_subitems_bom::get_sub_materials',['filter' => 'myauthuser']);
-$routes->get('get-sub-itemc','Md_subitems_bom::get_sub_itemc',['filter' => 'myauthuser']);
-$routes->post('sub-items-bom-save','Md_subitems_bom::sub_item_bom_save',['filter' => 'myauthuser']);
-$routes->post('sub-items-bom-update','Md_subitems_bom::sub_item_bom_update',['filter' => 'myauthuser']);
-$routes->post('sub-items-bom-recs', 'Md_subitems_bom::sub_item_bom_recs',['filter' => 'myauthuser']);
-$routes->add('sub-items-bom-recs-vw', 'Md_subitems_bom::sub_item_bom_recs_vw',['filter' => 'myauthuser']);
+//CS Sub Item BOM
+$routes->get('cs-sub-item-bom','MdCs_subitems_bom::index',['filter' => 'myauthuser']);
+$routes->post('cs-sub-items-bom-save','MdCs_subitems_bom::sub_item_bom_save',['filter' => 'myauthuser']);
+$routes->post('cs-sub-items-bom-update','MdCs_subitems_bom::sub_item_bom_update',['filter' => 'myauthuser']);
+$routes->post('cs-sub-items-bom-recs', 'MdCs_subitems_bom::sub_item_bom_recs',['filter' => 'myauthuser']);
+$routes->add('cs-sub-items-bom-recs-vw', 'MdCs_subitems_bom::sub_item_bom_recs_vw',['filter' => 'myauthuser']);
+$routes->get('get-sub-materials','MdCs_subitems_bom::get_sub_materials',['filter' => 'myauthuser']);
+$routes->get('get-sub-itemc','MdCs_subitems_bom::get_sub_itemc',['filter' => 'myauthuser']);
 
 //Sub item Convertion
 $routes->get('sub-item-convf','Md_subitems_convf::index',['filter' => 'myauthuser']);

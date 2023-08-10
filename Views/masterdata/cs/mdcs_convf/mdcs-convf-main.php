@@ -55,7 +55,7 @@ $active_branch = $rw['BRNCH_NAME'];
                             <div class="col-sm-12">
                                 <h6 class="card-title p-0">Select branch:</h6>
                                 <div class="input-group input-group-sm ">
-                                    <input type="text"  placeholder="Branch Name" id="branch_name" name="branch_name" class="branch_name form-control form-control-sm " required autocomplete="off" aria-describedby="basic-addon1" value="<?=$active_branch;?>"/>
+                                    <input type="text"  placeholder="Branch Name" id="branch_name" name="branch_name" class="branch_name form-control form-control-sm " required autocomplete="off" aria-describedby="basic-addon1" value="<?=$active_branch;?>" readonly/>
                                     <input type="hidden"  placeholder="Branch Name" id="branch_code" name="branch_code" class="branch_code form-control form-control-sm " required/>
                                     <div class="input-group-prepend" id="basic-addon1">
                                         <button type="button" id="mbtn_vw_recs" name="mbtn_vw_recs" class="btn btn-primary btn-sm m-0 rounded-0 rounded-end mbtn_vw_recs" ><i class="bi bi-search"></i> View</button>
@@ -105,7 +105,7 @@ function sub_items_view_convf(){
     var ajaxRequest;
 
     ajaxRequest = jQuery.ajax({
-        url: "<?=site_url();?>sub-inv-recs-convf",
+        url: "<?=site_url();?>cs-sub-convf-cur-recs",
         type: "post"
     });
 
@@ -163,7 +163,7 @@ function sub_items_view_convf(){
 
       $.ajax({ 
         type: "POST",
-        url: '<?=site_url();?>sub-inv-recs',
+        url: '<?=site_url();?>cs-sub-convf-recs',
         context: document.body,
         data: eval(mparam),
         global: false,
@@ -205,7 +205,7 @@ function sub_items_view_convf(){
     //     var ajaxRequest;
 
     //     ajaxRequest = jQuery.ajax({
-    //         url: "<?=site_url();?>sub-inv-recs",
+    //         url: "<?=site_url();?>cs-sub-convf-recs",
     //         type: "post"
     //     });
 

@@ -15,10 +15,10 @@ use App\Models\MyDatummodel;
 use App\Models\MyDatauaModel;
 use App\Models\MyWarehouseoutModel;
 use App\Models\MyLibzDBModel;
-use App\Models\MyMDSubItemsBom;
+use App\Models\MyMDCSBom;
 
 use App\Libraries\Fpdf\Mypdf;
-class Md_subitems_bom extends BaseController 
+class MdCs_subitems_bom extends BaseController 
 { 
 	
 	public function __construct()
@@ -26,7 +26,7 @@ class Md_subitems_bom extends BaseController
 		$this->mydbname = model('App\Models\MyDBNamesModel');
 		$this->db_erp = $this->mydbname->medb(0);
 		$this->mylibzdb = new MyLibzDBModel();
-		$this->mymdsubitemsbom = new MyMDSubItemsBom();
+		$this->mymdsubitemsbom = new MyMDCSBom();
 		$this->request = \Config\Services::request();
    		$this->db = \Config\Database::connect();
 	}
@@ -34,7 +34,7 @@ class Md_subitems_bom extends BaseController
 	public function index(){
 
 		echo view('templates/meheader03');
-		echo view('masterdata/sub_masterdata_bom/sub-md-item-bom-main');
+		echo view('masterdata/cs/mdcs_bom/mdcs-bom-main');
 		echo view('templates/mefooter01');
 
 	} 
@@ -70,7 +70,7 @@ class Md_subitems_bom extends BaseController
 		$q->freeResult();
 		echo json_encode($autoCompleteResult);
 		
-	} //end get_sub_materials	
+	} 
 
 	public function get_mdc(){
 		
@@ -101,24 +101,24 @@ class Md_subitems_bom extends BaseController
 		$q->freeResult();
 		echo json_encode($autoCompleteResult);
 		
-	} //end get_mdc	
+	} 
 
 	public function sub_item_bom_save(){
 
 		$this->mymdsubitemsbom->sub_items_bom_entry_save();
 
-	} //end	md_bom_save
+	} 
 
 	public function sub_item_bom_update(){
 
 		$this->mymdsubitemsbom->sub_items_bom_update();
 
-	} //end	md_bom_save
+	} 
 
 	public function sub_item_bom_recs() { 
 		
 		$data = $this->mymdsubitemsbom->sub_items_bom_view_recs(1, 10);
-        return view('masterdata/sub_masterdata_bom/sub-md-item-bom-recs',$data);
+        return view('masterdata/cs/mdcs_bom/mdcs-bom-recs',$data);
 		
     }
 
@@ -128,8 +128,8 @@ class Md_subitems_bom extends BaseController
         $mpages = $this->request->getVar('mpages');
         $mpages = (empty($mpages) ? 0 : $mpages);
         $data = $this->mymdsubitemsbom->sub_items_bom_view_recs($mpages, 10, $txtsearchedrec);
-        return view('masterdata/sub_masterdata_bom/sub-md-item-bom-recs', $data);
+        return view('masterdata/cs/mdcs_bom/mdcs-bom-recs', $data);
 
-    } //end sub_inv_recs_vw 
+    } 
 
 }

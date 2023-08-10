@@ -1,7 +1,7 @@
 <?php 
 
 /**
- *	File        : masterdata/sub_masterdata_inv/sub-md-item-inv-recs-vw-main.php
+ *	File        : masterdata/sub_masterdata_bom/sub-md-item-bom-recs.php
  *  Auhtor      : Kyle Alino
  *  Date Created: Jul 28, 2023
  * 	last update : Jul 28, 2023
@@ -32,7 +32,7 @@ for($aa = 1; $aa <= $npage_count; $aa++) {
 	}
 </style>
 
-<?=form_open('sub-inv-recs-vw-convf','class="needs-validation-search" id="myfrmsearchrec" ');?>
+<?=form_open('cs-sub-items-bom-recs-vw','class="needs-validation-search" id="myfrmsearchrec" ');?>
 
     <div class="col-md-6 mb-1">
         <div class="input-group input-group-sm">
@@ -48,16 +48,13 @@ for($aa = 1; $aa <= $npage_count; $aa++) {
     </div>
 	<div class="table-responsive">
 		<div class="col-md-12 col-md-12 col-md-12">
-			<table class="table table-condensed table-hover table-bordered table-sm " id="tbl_sub_items">
+			<table class="table table-condensed table-hover table-bordered table-sm " id="tbl_sub_items_bom">
 				<thead>
 					<tr>
+                        <th><i class="bi bi bi-gear"></i></th>
                         <th>Sub Itemcode</th>
-                        <th>Description</th>
-                        <th>Qty</th>
-                        <th>Cost</th>
-                        <th>Price</th>
-                        <th>Convf</th>
-                        <th>Main Itemcode</th>
+                        <th>Sub Materials</th>
+
 					</tr>
 				</thead>
 				<tbody>
@@ -65,15 +62,14 @@ for($aa = 1; $aa <= $npage_count; $aa++) {
                         if($rlist != ""):
                         $nn = 1;
                         foreach($rlist as $row): 
+                        $SUB_ITEM = $row['SUB_ITEM'];
                     ?>
                     <tr>
-                        <td nowrap><?=$row['ITEMC']?></td>
-                        <td nowrap><?=$row['ITEM_DESC']?></td>
-                        <td nowrap><?=$row['MQTY_CORRECTED']?></td>
-                        <td nowrap><?=$row['MCOST']?></td>
-                        <td nowrap><?=$row['MARTM_PRICE']?></td>
-                        <td nowrap><?=$row['ART_NCONVF']?></td>
-                        <td nowrap><?=$row['ART_CODE']?></td>
+                        <td class="text-center" nowrap>
+							<?=anchor('cs-sub-item-bom/?SUB_ITEM=' . $SUB_ITEM, '<i class="bi bi bi-pencil"></i> Update ',' class="btn btn-outline-success p-1 pb-0 mebtnpt1 btn-sm"');?>
+						</td>
+                        <td nowrap><?=$row['SUB_ITEM']?></td>
+                        <td nowrap><?=$row['Sub_Materials']?></td>
                     </tr>
                     <?php
                         $nn++;
@@ -102,14 +98,14 @@ function __myredirected_rsearch(mobj) {
             };	
 			jQuery.ajax({ // default declaration of ajax parameters
 				type: "POST",
-				url: '<?=site_url();?>sub-inv-recs-vw-convf',
+				url: '<?=site_url();?>cs-sub-items-bom-recs-vw',
 				context: document.body,
 				data: eval(mparam),
 				global: false,
 				cache: false,
 				success: function(data)  { //display html using divID
 					__mysys_apps.mepreloader('mepreloaderme',false);
-					$('#subitems').html(data);
+					$('#subitemsrecs').html(data);
 					
 					return false;
 				},
@@ -146,13 +142,13 @@ function __myredirected_rsearch(mobj) {
 
 				jQuery.ajax({ // default declaration of ajax parameters
 					type: "POST",
-					url: '<?=site_url();?>sub-inv-recs-vw-convf',
+					url: '<?=site_url();?>cs-sub-items-bom-recs-vw',
 					context: document.body,
 					data: eval(mparam),
 					global: false,
 					cache: false,
 					success: function(data)  { //display html using divID
-						jQuery('#subitems').html(data);
+						jQuery('#subitemsrecs').html(data);
 						__mysys_apps.mepreloader('mepreloaderme',false);
 						return false;
 					},
@@ -207,14 +203,14 @@ function __myredirected_rsearch(mobj) {
 						
 						jQuery.ajax({ // default declaration of ajax parameters
 							type: "POST",
-							url: '<?=site_url();?>sub-inv-recs-vw-convf',
+							url: '<?=site_url();?>cs-sub-items-bom-recs-vw',
 							context: document.body,
 							data: eval(mparam),
 							global: false,
 							cache: false,
 							success: function(data)  { //display html using divID
 								__mysys_apps.mepreloader('mepreloaderme',false);
-								jQuery('#subitems').html(data);
+								jQuery('#subitemsrecs').html(data);
 								
 							},
 							error: function() { // display global error on the menu function

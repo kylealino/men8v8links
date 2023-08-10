@@ -11,7 +11,7 @@
 namespace App\Models;
 use CodeIgniter\Model;
 
-class MyMDSubItemsBom extends Model
+class MyMDCSBom extends Model
 {
     public function __construct()
     {

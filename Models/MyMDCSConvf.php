@@ -11,7 +11,7 @@
 namespace App\Models;
 use CodeIgniter\Model;
 
-class MyMDSubItemsInv extends Model
+class MyMDCSConvf extends Model
 {
     public function __construct()
     {
@@ -31,7 +31,13 @@ class MyMDSubItemsInv extends Model
 
 
     public function sub_items_inv_view_recs($npages = 1,$npagelimit = 10,$msearchrec='') {
-
+        // $branch_name = $this->request->getvar('branch_name');
+        // $str="SELECT `BRNCH_NAME`,`BRNCH_OCODE2`,`BRNCH_MBCODE` FROM mst_companyBranch WHERE `BRNCH_NAME` = '$branch_name'";
+        // $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+        // $rw = $q->getRowArray();
+        // $br_ocode2 = $rw['BRNCH_OCODE2'];
+        // $tblSalesout = "{$this->db_erp}.`trx_E{$br_ocode2}_salesout`";
+        
         $str_optn = "";
         if(!empty($msearchrec)) { 
             $msearchrec = $this->dbx->escapeString($msearchrec);
@@ -91,6 +97,13 @@ class MyMDSubItemsInv extends Model
 
     public function sub_inv_entry_save() {
 
+        $branch_name = $this->request->getvar('branch_name');
+        $str="SELECT `BRNCH_NAME`,`BRNCH_OCODE2`,`BRNCH_MBCODE` FROM mst_companyBranch WHERE `BRNCH_NAME` = '$branch_name'";
+        $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+        $rw = $q->getRowArray();
+        $br_ocode2 = $rw['BRNCH_OCODE2'];
+        $tblSalesout = "{$this->db_erp}.`trx_E{$br_ocode2}_salesout`";
+
         $adata1 = $this->request->getVar('adata1');
         if (empty($adata1)) {
             echo "<div class=\"alert alert-danger\" role=\"alert\"><strong>Info.<br/></strong><strong>User Error</strong> No Sales Detected! </div>";
@@ -120,7 +133,7 @@ class MyMDSubItemsInv extends Model
             SUM(a.`SO_NET`) SO_NET,
             b.`SUB_DESC`
         FROM
-            {$this->db_erp}.`trx_E0021CS_salesout` a
+            $tblSalesout  a
         JOIN
             {$this->db_erp}.`mst_cs_article` b
         ON
