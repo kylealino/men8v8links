@@ -10,7 +10,7 @@
 $request = \Config\Services::request();
 $mylibzdb = model('App\Models\MyLibzDBModel');
 $mylibzsys = model('App\Models\MyLibzSysModel');
-$branch_name = $request->getVar('branch_name');
+$_branch_name = $request->getVar('branch_name');
 $mytxtsearchrec = $request->getVar('txtsearchedrec');
 $data = array();
 $mpages = (empty($mylibzsys->oa_nospchar($request->getVar('mpages'))) ? 0 : $mylibzsys->oa_nospchar($request->getVar('mpages')));
@@ -46,7 +46,7 @@ for($aa = 1; $aa <= $npage_count; $aa++) {
 <div class="col-md-8">
 	<?=$mylibzsys->mypagination($npage_curr,$npage_count,'__myredirected_rsearch','');?>
 </div>
-	<input type="hidden" name="branch_name" value="<?=$branch_name;?>">
+	<input type="hidden" name="_branch_name" value="<?=$_branch_name;?>">
 	<div class="table-responsive">
 		<div class="col-md-12 col-md-12 col-md-12">
 			<table class="table table-condensed table-hover table-bordered table-sm " id="tbl_sub_items_inv">
@@ -260,7 +260,7 @@ function __myredirected_rsearch(mobj) {
 	$("#mbtn_mn_Save").click(function(e){
     try { 
 
-          var branch_name = jQuery('#branch_name').val();
+          var _branch_name = jQuery('#_branch_name').val();
           var rowCount1 = jQuery('#tbl_sub_items_inv tr').length;
           var adata1 = [];
           var mdata = '';
@@ -280,7 +280,6 @@ function __myredirected_rsearch(mobj) {
 			}  //end for
 
           var mparam = {
-			branch_name:branch_name,
             adata1: adata1
           };  
 
