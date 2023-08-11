@@ -165,7 +165,7 @@ class MyMDCSBomModel extends Model
         if(!empty($msearchrec)) { 
             $msearchrec = $this->dbx->escapeString($msearchrec);
             $str_optn = " WHERE
-            (`ART_CODE` LIKE '%{$msearchrec}%' OR `SUB_ITEM` LIKE '%{$msearchrec}%') ";
+            (`SUB_ITEM` LIKE '%{$msearchrec}%') ";
         }
         
         $strqry = "
