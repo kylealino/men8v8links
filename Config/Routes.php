@@ -226,8 +226,10 @@ $routes->get('mypromo-spromo-fromitems', 'Mypromo_spromo::fromspromo_items_searc
 $routes->post('mypromo-spromo-save', 'Mypromo_spromo::save_recs',['filter' => 'myauthuser']);
 $routes->post('mypromo-spromo-recs', 'Mypromo_spromo::view_recs',['filter' => 'myauthuser']);
 $routes->post('mypromo-spromo-rundown', 'Mypromo_spromo::spromo_rundown',['filter' => 'myauthuser']);
+$routes->post('mypromo-spromo-rundown-regitm', 'Mypromo_spromo::spromo_rundown_regitm',['filter' => 'myauthuser']);
 $routes->get('mypromo-spromo-codes-rundown', 'Mypromo_spromo::tospromo_item_rundown_search',['filter' => 'myauthuser']);
 $routes->post('mypromo-spromo-rundown-save', 'Mypromo_spromo::spromo_rundown_save',['filter' => 'myauthuser']);
+$routes->post('mypromo-spromo-rundown-save-regitem', 'Mypromo_spromo::spromo_rundown_save_regitem',['filter' => 'myauthuser']);
 $routes->post('mypromo-spromo-ivty-reg-mapping', 'Mypromo_spromo::spromo_ivty_reg_mapping',['filter' => 'myauthuser']);
 
 //mypos related module
@@ -353,6 +355,14 @@ $routes->post('sub-items-convf-save','Md_subitems_convf::sub_item_convf_save',['
 
 $routes->get('mysimul-test1', 'MyTestSimul::test1',['filter' => 'myauthuser']);
 $routes->post('mysimul-test1-proc', 'MyTestSimul::test1_proc',['filter' => 'myauthuser']);
+
+//TEST JOY
+$routes->get('test-joy','CT_joy::index',['filter' => 'myauthuser']);
+$routes->post('test-joy-save','CT_joy::test_joy_save',['filter' => 'myauthuser']);
+$routes->post('test-joy-recs', 'CT_joy::test_joy_recs',['filter' => 'myauthuser']);
+$routes->add('test-joy-recs-vw', 'CT_joy::test_joy_recs_vw',['filter' => 'myauthuser']);
+$routes->post('test-joy-update','CT_joy::test_joy_update',['filter' => 'myauthuser']);
+$routes->post('test-joy-delete','CT_joy::test_joy_delete',['filter' => 'myauthuser']);
 /*
  * --------------------------------------------------------------------
  * Additional Routing

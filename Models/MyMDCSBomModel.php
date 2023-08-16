@@ -222,6 +222,11 @@ class MyMDCSBomModel extends Model
             die();
         }
 
+        $str="
+            DELETE FROM mst_sub_bom WHERE `SUB_ITEM` = '$sub_item';
+        ";
+        $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
+
 
         if(count($adata1) > 0) { 
             $ame = array();
@@ -276,50 +281,28 @@ class MyMDCSBomModel extends Model
                             die();
                         }
                     }
-
+                    
                     $str="
-                        SELECT `SUB_ITEM_MATERIAL` FROM mst_sub_bom WHERE `SUB_ITEM_MATERIAL` = '$mitemc'
+                    INSERT INTO `mst_sub_bom` (
+                        `SUB_ITEM`,
+                        `SUB_ITEM_MATERIAL`,
+                        `UNIT`,
+                        `UOM`,
+                        `COST`,
+                        `COST_NET`
+                        )
+                        VALUES
+                        (
+                            '$sub_item',
+                            '$mitemc',
+                            '$munit',
+                            '$muom',
+                            '$mcost',
+                            '$mcostnet'
+                        );
                     ";
                     $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
-                    if($q->resultID->num_rows == 0) {
-                        $str="
-                        INSERT INTO `mst_sub_bom` (
-                            `SUB_ITEM`,
-                            `SUB_ITEM_MATERIAL`,
-                            `UNIT`,
-                            `UOM`,
-                            `COST`,
-                            `COST_NET`
-                          )
-                          VALUES
-                            (
-                              '$sub_item',
-                              '$mitemc',
-                              '$munit',
-                              '$muom',
-                              '$mcost',
-                              '$mcostnet'
-                            );
-                        ";
-                        $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
-                    } else {
-                        $str="
-                        UPDATE
-                            `mst_sub_bom`
-                        SET
-                            `SUB_ITEM` = '$sub_item',
-                            `SUB_ITEM_MATERIAL` = '$mitemc',
-                            `UNIT` = '$munit',
-                            `UOM` = '$muom',
-                            `COST` = '$mcost',
-                            `COST_NET` = '$mcostnet'
-                        WHERE 
-                            `SUB_ITEM_MATERIAL` = '$mitemc' AND
-                            `SUB_ITEM` = '$sub_item'
-                      
-                        ";
-                        $q = $this->mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
-                    }
+
 
                 }
                 

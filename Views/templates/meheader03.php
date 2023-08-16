@@ -309,6 +309,11 @@ $cuserfullname = session()->get('__xsys_myusererpfullname__');
               <i class="bi bi-circle"></i><span>BOM</span>
             </a>
           </li>
+          <li>
+            <a href="<?=site_url();?>test-joy">
+              <i class="bi bi-circle"></i><span>JOY TESTING</span>
+            </a>
+          </li>
         </ul>
       </li> <!-- End Maintenance Nav -->
 
