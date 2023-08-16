@@ -51,6 +51,7 @@ $SUB_ITEM = $request->getVar('SUB_ITEM');
                                                 </button>
                                             </th>
                                             <th nowrap="nowrap">ITEM</th>
+                                            <th nowrap="nowrap">DESCRIPTION</th>
                                             <th nowrap="nowrap">UNIT</th>
                                             <th nowrap="nowrap">UOM</th>
                                             <th nowrap="nowrap">COST</th>
@@ -61,26 +62,31 @@ $SUB_ITEM = $request->getVar('SUB_ITEM');
                                         <?php if(!empty($SUB_ITEM)):
                                           $str="
                                           SELECT
-                                            `SUB_ITEM`,
-                                            `SUB_ITEM_MATERIAL`,
-                                            `UNIT`,
-                                            `UOM`,
-                                            `COST`,
-                                            `COST_NET`
+                                            a.`SUB_ITEM`,
+                                            a.`SUB_ITEM_MATERIAL`,
+                                            b.`ART_DESC`,
+                                            a.`UNIT`,
+                                            a.`UOM`,
+                                            a.`COST`,
+                                            a.`COST_NET`
                                           FROM
-                                            `mst_sub_bom`
+                                            `mst_sub_bom` a
+                                          JOIN
+                                            `mst_article` b
+                                          ON
+                                            a.`SUB_ITEM_MATERIAL` = b.`ART_CODE`
                                           WHERE 
-                                            `SUB_ITEM` = '$SUB_ITEM'
+                                            a.`SUB_ITEM` = '$SUB_ITEM'
                                           ";
                                           $q = $mylibzdb->myoa_sql_exec($str,'URI: ' . $_SERVER['PHP_SELF'] . chr(13) . chr(10) . 'File: ' . __FILE__  . chr(13) . chr(10) . 'Line Number: ' . __LINE__);
                                           $rw = $q->getResultArray();
                                           foreach ($rw as $data) {
                                             $SUB_ITEM_MATERIAL = $data['SUB_ITEM_MATERIAL'];
+                                            $ART_DESC = $data['ART_DESC'];
                                             $UNIT = $data['UNIT'];
                                             $UOM = $data['UOM'];
                                             $COST = $data['COST'];
                                             $COST_NET = $data['COST_NET'];
-
                                         ?>
                                         <tr>
                                           <td nowrap="nowrap">
@@ -89,6 +95,7 @@ $SUB_ITEM = $request->getVar('SUB_ITEM');
                                             <input type="hidden" value=""/>
                                           </td>
                                           <td nowrap="nowrap"><input type="text" class="form-control form-control-sm mitemcode" value="<?=$SUB_ITEM_MATERIAL;?>" ></td>
+                                          <td nowrap="nowrap"><input type="text" class="form-control form-control-sm mitemcode" value="<?=$ART_DESC;?>" ></td>
                                           <td nowrap="nowrap"><input type="text" class="form-control form-control-sm" value="<?=$UNIT;?>"></td>
                                           <td nowrap="nowrap"><input type="text" class="form-control form-control-sm" value="<?=$UOM;?>"></td>
                                           <td nowrap="nowrap"><input type="text" class="form-control form-control-sm" value="<?=$COST;?>"></td>
@@ -103,6 +110,7 @@ $SUB_ITEM = $request->getVar('SUB_ITEM');
                                             <input type="hidden" value=""/>
                                             </td>
                                             <td nowrap="nowrap"><input type="text" class="form-control form-control-sm mitemcode"></td>
+                                            <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
                                             <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
                                             <td nowrap="nowrap"><input type="text" class="form-control form-control-sm"></td>
                                             <td nowrap="nowrap"><input type="text" class="form-control form-control-sm" onmouseover="javascript:__pack_totals();" onmouseout="javascript:__pack_totals();"></td>
@@ -188,10 +196,10 @@ $SUB_ITEM = $request->getVar('SUB_ITEM');
          for(aa = 1; aa < rowCount1; aa++) { 
            var clonedRow = jQuery('#tbl-bom tr:eq(' + aa + ')').clone(); 
            var mitemc = jQuery(clonedRow).find('input[type=text]').eq(0).val(); 
-           var munit = jQuery(clonedRow).find('input[type=text]').eq(1).val(); 
-           var muom = jQuery(clonedRow).find('input[type=text]').eq(2).val();
-           var mcost = jQuery(clonedRow).find('input[type=text]').eq(3).val(); 
-           var mcostnet = jQuery(clonedRow).find('input[type=text]').eq(4).val(); 
+           var munit = jQuery(clonedRow).find('input[type=text]').eq(2).val(); 
+           var muom = jQuery(clonedRow).find('input[type=text]').eq(3).val();
+           var mcost = jQuery(clonedRow).find('input[type=text]').eq(4).val(); 
+           var mcostnet = jQuery(clonedRow).find('input[type=text]').eq(5).val(); 
 
            mdata = mitemc + 'x|x' + munit + 'x|x' + muom + 'x|x' + mcost + 'x|x' + mcostnet ;
            adata1.push(mdata);
@@ -245,10 +253,10 @@ $SUB_ITEM = $request->getVar('SUB_ITEM');
          for(aa = 1; aa < rowCount1; aa++) { 
            var clonedRow = jQuery('#tbl-bom tr:eq(' + aa + ')').clone(); 
            var mitemc = jQuery(clonedRow).find('input[type=text]').eq(0).val(); 
-           var munit = jQuery(clonedRow).find('input[type=text]').eq(1).val(); 
-           var muom = jQuery(clonedRow).find('input[type=text]').eq(2).val();
-           var mcost = jQuery(clonedRow).find('input[type=text]').eq(3).val(); 
-           var mcostnet = jQuery(clonedRow).find('input[type=text]').eq(4).val(); 
+           var munit = jQuery(clonedRow).find('input[type=text]').eq(2).val(); 
+           var muom = jQuery(clonedRow).find('input[type=text]').eq(3).val();
+           var mcost = jQuery(clonedRow).find('input[type=text]').eq(4).val(); 
+           var mcostnet = jQuery(clonedRow).find('input[type=text]').eq(5).val(); 
 
            mdata = mitemc + 'x|x' + munit + 'x|x' + muom + 'x|x' + mcost + 'x|x' + mcostnet ;
            adata1.push(mdata);
@@ -492,10 +500,12 @@ $SUB_ITEM = $request->getVar('SUB_ITEM');
 
                   var clonedRow = jQuery(this).parent().parent().clone();
                   var indexRow = jQuery(this).parent().parent().index();
-                  var xobjitemdesc = jQuery(clonedRow).find('input[type=hidden]').eq(0).attr('id'); //ID
-                  var xobjitemuom = jQuery(clonedRow).find('input[type=text]').eq(2).attr('id');/*BCODE*/
+                  var xobjitemc = jQuery(clonedRow).find('input[type=hidden]').eq(0).attr('id'); //ID
+                  var xobjitedesc = jQuery(clonedRow).find('input[type=text]').eq(1).attr('id');/*BCODE*/
+                  var xobjitemuom = jQuery(clonedRow).find('input[type=text]').eq(3).attr('id');/*BCODE*/
 
-                  $('#' + xobjitemdesc).val(ui.item.ART_CODE);
+                  $('#' + xobjitemc).val(ui.item.ART_CODE);
+                  $('#' + xobjitedesc).val(ui.item.ART_DESC);
                   $('#' + xobjitemuom).val(ui.item.ART_UOM);
 
                   return false;
@@ -522,8 +532,8 @@ $SUB_ITEM = $request->getVar('SUB_ITEM');
             var nTQty = 0;
             for(aa = 1; aa < rowCount1; aa++) { 
               var clonedRow = jQuery('#tbl-bom tr:eq(' + aa + ')').clone(); 
-              var cost = jQuery(clonedRow).find('input[type=text]').eq(3).val();
-              var xTAmntId = jQuery(clonedRow).find('input[type=text]').eq(4).attr('id');
+              var cost = jQuery(clonedRow).find('input[type=text]').eq(4).val();
+              var xTAmntId = jQuery(clonedRow).find('input[type=text]').eq(5).attr('id');
 
               var ntotal = cost / 1.12;
               

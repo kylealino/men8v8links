@@ -48,7 +48,8 @@ class MdCs_subitems_bom extends BaseController
 		SELECT
 		a.`recid`,
 		a.`ART_CODE`,
-		a.`ART_UOM`
+		a.`ART_UOM`,
+		a.`ART_DESC`
 
 		FROM 
 		`mst_article` a
@@ -62,7 +63,8 @@ class MdCs_subitems_bom extends BaseController
 			$rrec = $q->getResultArray();
 			foreach($rrec as $row):
 				array_push($autoCompleteResult,array("value" => $row['ART_CODE'],
-				"ART_UOM" => $row['ART_UOM']
+				"ART_UOM" => $row['ART_UOM'],
+				"ART_DESC" => $row['ART_DESC']
 				));
 			endforeach;
 		}

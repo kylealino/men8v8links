@@ -53,6 +53,7 @@ for($aa = 1; $aa <= $npage_count; $aa++) {
 					<tr>
                         <th><i class="bi bi bi-gear"></i></th>
                         <th>Sub Itemcode</th>
+						<th>Sub Description</th>
                         <th>Sub Materials</th>
 
 					</tr>
@@ -69,6 +70,7 @@ for($aa = 1; $aa <= $npage_count; $aa++) {
 							<?=anchor('cs-sub-item-bom/?SUB_ITEM=' . $SUB_ITEM, '<i class="bi bi bi-pencil"></i> Update ',' class="btn btn-outline-success p-1 pb-0 mebtnpt1 btn-sm"');?>
 						</td>
                         <td nowrap><?=$row['SUB_ITEM']?></td>
+						<td nowrap><?=$row['ART_DESC']?></td>
                         <td nowrap><?=$row['Sub_Materials']?></td>
                     </tr>
                     <?php

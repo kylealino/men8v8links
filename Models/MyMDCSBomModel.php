@@ -170,10 +170,15 @@ class MyMDCSBomModel extends Model
         
         $strqry = "
         SELECT 
-        a.`SUB_ITEM`, 
+        a.`SUB_ITEM`,
+        b.`ART_DESC`, 
         GROUP_CONCAT(a.`SUB_ITEM_MATERIAL`) AS Sub_Materials
         FROM
         mst_sub_bom a
+        JOIN
+        mst_article b
+        ON
+        a.`SUB_ITEM` = b.`ART_CODE`
         {$str_optn}
         GROUP BY `SUB_ITEM`
         ";
